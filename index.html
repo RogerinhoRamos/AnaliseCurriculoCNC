@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Analisador de Currículos CNC</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .header-features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .upload-section {
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .upload-area {
+            border: 3px dashed #3498db;
+            border-radius: 15px;
+            padding: 40px;
+            background: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: #2980b9;
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .upload-subtext {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .dashboard {
+            padding: 40px;
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .candidate-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .table-content {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .candidate-row {
+            padding: 15px 20px;
+            border-bottom: 1px solid #ecf0f1;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+            gap: 15px;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .candidate-row:hover {
+            background: #f8f9fa;
+        }
+
+        .candidate-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .candidate-profile {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .profile-preparador {
+            background: #e8f5e8;
+            color: #27ae60;
+        }
+
+        .profile-operador {
+            background: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .profile-mixed {
+            background: #fff3e0;
+            color: #ff9800;
+        }
+
+        .machine-type {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .experience-years {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #ecf0f1;
+            border-left: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 25px 40px;
+            margin-top: 0;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .year {
+            font-weight: 600;
+            color: #3498db;
+        }
+
+        .developer {
+            color: #ecf0f1;
+        }
+
+        .developer strong {
+            color: #f39c12;
+            font-weight: 700;
+        }
+
+        .separator {
+            color: #7f8c8d;
+            font-weight: 300;
+        }
+
+        .tech {
+            color: #95a5a6;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .filters {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header-features {
+                gap: 10px;
+            }
+
+            .feature {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+            
+            .upload-section {
+                padding: 20px;
+            }
+            
+            .dashboard {
+                padding: 20px;
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .candidate-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .footer {
+                padding: 20px;
+            }
+
+            .copyright {
+                flex-direction: column;
+                gap: 5px;
+                font-size: 0.8rem;
+            }
+
+            .separator {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Analisador de Currículos CNC</h1>
+            <p>Análise Dinâmica para Preparadores e Operadores CNC</p>
+            <div class="header-features">
+                <span class="feature">📄 PDFs Individuais</span>
+                <span class="feature">📋 PDFs Unificados</span>
+                <span class="feature">🤖 Análise Automática</span>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📄</div>
+                <div class="upload-text">Clique ou arraste seus PDFs aqui</div>
+                <div class="upload-subtext">Suporte para PDFs individuais ou unificados com múltiplos candidatos</div>
+                <input type="file" id="fileInput" multiple accept=".pdf">
+            </div>
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <button class="btn" id="analyzeBtn" onclick="startAnalysis()">🚀 Iniciar Análise</button>
+        </div>
+
+        <div class="dashboard" id="dashboard">
+            <div class="filters" id="filters">
+                <div class="filter-group">
+                    <label class="filter-label">Perfil:</label>
+                    <select class="filter-select" id="profileFilter">
+                        <option value="">Todos</option>
+                        <option value="preparador">Preparador</option>
+                        <option value="operador">Operador</option>
+                        <option value="mixed">Multifuncional</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Máquina:</label>
+                    <select class="filter-select" id="machineFilter">
+                        <option value="">Todas</option>
+                        <option value="torno">Torno CNC</option>
+                        <option value="centro">Centro de Usinagem</option>
+                        <option value="ambos">Ambos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Cidade:</label>
+                    <select class="filter-select" id="cityFilter">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalCandidates">0</span>
+                    <div class="stat-label">Total de Candidatos</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="preparadorCount">0</span>
+                    <div class="stat-label">Preparadores CNC</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="operadorCount">0</span>
+                    <div class="stat-label">Operadores CNC</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="avgAge">0</span>
+                    <div class="stat-label">Idade Média</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="avgExperience">0</span>
+                    <div class="stat-label">Anos Experiência Média</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-title">📊 Distribuição por Perfil</div>
+                    <canvas id="profileChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">🏭 Tipo de Máquina</div>
+                    <canvas id="machineChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">👥 Distribuição por Idade</div>
+                    <canvas id="ageChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">🎓 Nível de Escolaridade</div>
+                    <canvas id="educationChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">📍 Distribuição Geográfica</div>
+                    <canvas id="locationChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">⏱️ Experiência por Anos</div>
+                    <canvas id="experienceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="candidate-table">
+                <div class="table-header">
+                    👨‍💼 Ranking de Candidatos
+                </div>
+                <div class="table-content" id="candidateTable">
+                    <!-- Tabela será preenchida dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer com Copyright -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p class="copyright">
+                    <span class="year">© 2025</span>
+                    <span class="separator">•</span>
+                    <span class="developer">Desenvolvido por <strong>Rogerinho Ramos</strong></span>
+                    <span class="separator">•</span>
+                    <span class="tech">Analytics Tool & JavaScript</span>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Configuração do PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // Variáveis globais
+        let analyzedData = [];
+        let charts = {};
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+
+            // Upload area click
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            // Drag and drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
+                if (files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    updateUploadUI(files);
+                }
+            });
+
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                updateUploadUI(files);
+            });
+
+            // Filters
+            document.getElementById('profileFilter').addEventListener('change', applyFilters);
+            document.getElementById('machineFilter').addEventListener('change', applyFilters);
+            document.getElementById('cityFilter').addEventListener('change', applyFilters);
+        }
+
+        function updateUploadUI(files) {
+            const uploadText = document.querySelector('.upload-text');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            
+            if (files.length > 0) {
+                if (files.length === 1) {
+                    uploadText.textContent = `📄 ${files.length} arquivo selecionado (individual ou unificado)`;
+                } else {
+                    uploadText.textContent = `📄 ${files.length} arquivos selecionados (múltiplos PDFs)`;
+                }
+                analyzeBtn.disabled = false;
+            } else {
+                uploadText.textContent = 'Clique ou arraste seus PDFs aqui';
+                analyzeBtn.disabled = true;
+            }
+        }
+
+        async function startAnalysis() {
+            const files = document.getElementById('fileInput').files;
+            if (files.length === 0) return;
+
+            showLoading();
+            
+            try {
+                analyzedData = [];
+                for (let i = 0; i < files.length; i++) {
+                    await processFile(files[i], i + 1, files.length);
+                }
+                
+                generateDashboard();
+                showDashboard();
+            } catch (error) {
+                console.error('Erro na análise:', error);
+                alert('Erro ao processar os arquivos. Tente novamente.');
+            }
+        }
+
+        function showLoading() {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.display = 'block';
+            document.getElementById('analyzeBtn').disabled = true;
+        }
+
+        function updateProgress(current, total) {
+            const progress = (current / total) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+
+        async function processFile(file, index, total) {
+            updateProgress(index - 0.5, total);
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                
+                let fullText = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    fullText += pageText + ' ';
+                }
+
+                // Detectar se é PDF unificado ou individual
+                const candidates = splitUnifiedPDF(fullText, file.name);
+                
+                if (candidates.length > 1) {
+                    // PDF unificado - múltiplos candidatos
+                    console.log(`📋 PDF unificado detectado: ${candidates.length} candidatos encontrados`);
+                    console.log('📝 Candidatos identificados:', candidates.map(c => c.name || 'Nome não identificado'));
+                    candidates.forEach(candidateData => {
+                        if (candidateData.name && candidateData.name.length > 2) {
+                            analyzedData.push(candidateData);
+                        }
+                    });
+                } else {
+                    // PDF individual - um candidato
+                    console.log(`📄 PDF individual processado`);
+                    const candidateData = extractCandidateInfo(fullText, file.name);
+                    if (candidateData.name) {
+                        analyzedData.push(candidateData);
+                    }
+                }
+
+            } catch (error) {
+                console.error(`Erro ao processar ${file.name}:`, error);
+            }
+
+            updateProgress(index, total);
+        }
+
+        function splitUnifiedPDF(fullText, filename) {
+            // Padrões para identificar início de novo candidato
+            const candidateSeparators = [
+                /(?=\d+\.\s+[A-ZÁÊÀ][a-záêàçãõéíóú\s]+(?:Cand-\d+|ID|Nome))/g, // "1. NOME Cand-12345"
+                /(?=Nome do candidato|NOME DO CANDIDATO)/gi,
+                /(?=\n[A-ZÁÊÀ][A-ZÁÊÀÇÃÕÉÍÓÚ\s]{10,50}\n.*?(?:Brasileiro|Data|Nascimento|Idade))/g, // Nome em maiúscula seguido de dados
+                /(?=\n[A-ZÁÊÀ][a-záêàçãõéíóú\s]+\n.*?(?:anos|Brasileiro|Estado Civil|Endereço))/g, // Nome seguido de informações básicas
+                /(?=Objetivo\s*Profissional|OBJETIVO|Formação|FORMAÇÃO)/gi,
+                /(?=Experiência\s*Profissional|EXPERIÊNCIA)/gi
+            ];
+
+            let candidates = [];
+            let bestSplit = [fullText]; // Default: texto completo como um candidato
+
+            // Tentar diferentes padrões de separação
+            for (let separator of candidateSeparators) {
+                const splits = fullText.split(separator).filter(section => section.trim().length > 100);
+                
+                if (splits.length > bestSplit.length) {
+                    bestSplit = splits;
+                }
+            }
+
+            // Método alternativo: buscar por padrões específicos do seu PDF
+            if (bestSplit.length === 1) {
+                // Procurar por padrão "Cand-XXXXX"
+                const candidatePattern = /(?=.*?Cand-\d+)/g;
+                const candidateMatches = [...fullText.matchAll(/Cand-\d+/g)];
+                
+                if (candidateMatches.length > 1) {
+                    // Dividir baseado nas posições dos Cand-XXXXX
+                    const positions = candidateMatches.map(match => match.index);
+                    bestSplit = [];
+                    
+                    for (let i = 0; i < positions.length; i++) {
+                        const start = i === 0 ? 0 : positions[i-1];
+                        const end = i === positions.length - 1 ? fullText.length : positions[i+1];
+                        const section = fullText.substring(start, end);
+                        
+                        if (section.trim().length > 50) {
+                            bestSplit.push(section);
+                        }
+                    }
+                }
+            }
+
+            // Método ainda mais específico para seu formato
+            if (bestSplit.length === 1) {
+                // Procurar por nomes seguidos de informações pessoais
+                const namePattern = /([A-ZÁÊÀ][A-ZÁÊÀçãõéíóú\s]{5,40})\s*(?:Brasileiro|•|Casado|Solteiro|\d+\s*anos|Data|Endereço|Rua)/g;
+                let matches = [...fullText.matchAll(namePattern)];
+                
+                if (matches.length > 1) {
+                    bestSplit = [];
+                    const positions = matches.map(match => match.index);
+                    
+                    for (let i = 0; i < positions.length; i++) {
+                        const start = positions[i];
+                        const end = i === positions.length - 1 ? fullText.length : positions[i + 1];
+                        const section = fullText.substring(start, end);
+                        
+                        if (section.trim().length > 100) {
+                            bestSplit.push(section);
+                        }
+                    }
+                }
+            }
+
+            console.log(`🔍 Tentativa de divisão: ${bestSplit.length} seções encontradas`);
+
+            // Processar cada seção como um candidato
+            bestSplit.forEach((section, index) => {
+                if (section.trim().length > 50) {
+                    const candidateData = extractCandidateInfo(section, `${filename}_candidato_${index + 1}`);
+                    if (candidateData.name && candidateData.name.length > 2) {
+                        candidates.push(candidateData);
+                    }
+                }
+            });
+
+            return candidates;
+        }
+
+        function extractCandidateInfo(text, filename) {
+            // Padrões de regex melhorados para o formato específico
+            const patterns = {
+                name: /(?:Nome.*?candidato|^\d+\.\s*)([A-ZÁÊÀ][a-záêàçãõéíóú\s]+?)(?:\s*Cand-\d+|\n|Idade|Data|Brasileiro|Estado|Endereço|Rua|Objetivo|•)/i,
+                alternativeName: /([A-ZÁÊÀ][A-ZÁÊÀÇÃÕÉÍÓÚ\s]{5,50})(?:\s*•|\s*Casado|\s*Solteiro|\s*Brasileiro|\s*\d+\s*anos)/,
+                candidateId: /Cand-(\d+)/,
+                age: /(\d{1,2})\s*anos?|Data.*?(\d{2})\/(\d{2})\/(\d{4})|Nascimento.*?(\d{2})\/(\d{2})\/(\d{4})|(\d{4})\s*[-–]\s*Casado/i,
+                city: /(Jundiaí|Várzea Paulista|Campo Limpo Paulista|Campo Limpo|Cajamar|Itupeva|Franco da Rocha|São Paulo|Cabreúva|Louveira|Itatiba|Sorocaba|Campinas|Santos|Indaiatuba)/i,
+                profile: /(Preparador|Operador|PREPARADOR|OPERADOR|Prep\.Op\.CNC|Multifuncional)/gi,
+                machines: /(Torno CNC|Centro de Usinagem|Torno Vertical|Torno Horizontal|centro de usinagem|torno cnc|CNC|Retífica|Fresadora)/gi,
+                education: /(Ensino Médio|Superior|Técnico|Graduação|Engenharia|Tecnólogo)/i,
+                experience: /(\d{4})\s*[-–]\s*(\d{4}|atual|presente|\w+)|Período.*?(\d{1,2})\/(\d{4}).*?(\d{1,2})\/(\d{4})|(\d{2}\/\d{2}\/\d{4})\s*[-–]\s*(\d{2}\/\d{2}\/\d{4})/g,
+                senaiCourse: /(SENAI|Senai).*?(Programação|Operação|Torno|Centro|Usinagem|CNC)/gi,
+                companies: /(ThyssenKrupp|SKF|Continental|Dana|Knorr|Sifco|Dexco|Klabin|Joyson)/gi
+            };
+
+            const candidate = {
+                name: '',
+                age: 0,
+                city: '',
+                profile: '',
+                machineType: '',
+                education: '',
+                experienceYears: 0,
+                candidateId: '',
+                filename: filename,
+                senaiCourses: 0,
+                companies: []
+            };
+
+            // Extrair ID do candidato
+            const idMatch = text.match(patterns.candidateId);
+            if (idMatch) {
+                candidate.candidateId = idMatch[1];
+            }
+
+            // Extrair nome (melhorado)
+            let nameMatch = text.match(patterns.name);
+            if (!nameMatch) {
+                nameMatch = text.match(patterns.alternativeName);
+            }
+            if (nameMatch) {
+                let name = nameMatch[1].trim();
+                // Limpar nome de caracteres especiais e normalizar
+                name = name.replace(/[•\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim();
+                candidate.name = name.split(' ').slice(0, 4).join(' '); // Máximo 4 palavras
+            }
+
+            // Extrair idade (melhorado)
+            const ageMatch = text.match(patterns.age);
+            if (ageMatch) {
+                if (ageMatch[1]) {
+                    candidate.age = parseInt(ageMatch[1]);
+                } else if (ageMatch[4]) { // Data de nascimento DD/MM/YYYY
+                    const birthYear = parseInt(ageMatch[4]);
+                    if (birthYear > 1940 && birthYear < 2010) {
+                        candidate.age = 2025 - birthYear;
+                    }
+                } else if (ageMatch[7]) { // Formato alternativo
+                    const birthYear = parseInt(ageMatch[7]);
+                    if (birthYear > 1940 && birthYear < 2010) {
+                        candidate.age = 2025 - birthYear;
+                    }
+                }
+            }
+
+            // Extrair cidade
+            const cityMatch = text.match(patterns.city);
+            if (cityMatch) {
+                candidate.city = cityMatch[1];
+            }
+
+            // Determinar perfil (melhorado)
+            const profileMatches = text.match(patterns.profile) || [];
+            const preparadorCount = profileMatches.filter(p => 
+                p.toLowerCase().includes('preparador') || p.toLowerCase().includes('prep')
+            ).length;
+            const operadorCount = profileMatches.filter(p => 
+                p.toLowerCase().includes('operador') && !p.toLowerCase().includes('preparador')
+            ).length;
+            const multifuncionalCount = profileMatches.filter(p => 
+                p.toLowerCase().includes('multifuncional')
+            ).length;
+
+            if (multifuncionalCount > 0 || (preparadorCount > 0 && operadorCount > 0)) {
+                candidate.profile = 'mixed';
+            } else if (preparadorCount > operadorCount) {
+                candidate.profile = 'preparador';
+            } else if (operadorCount > 0) {
+                candidate.profile = 'operador';
+            } else {
+                // Inferir pelo título ou contexto
+                if (text.toLowerCase().includes('prep.op.cnc') || text.toLowerCase().includes('preparador')) {
+                    candidate.profile = 'preparador';
+                } else if (text.toLowerCase().includes('operador')) {
+                    candidate.profile = 'operador';
+                } else {
+                    candidate.profile = 'mixed';
+                }
+            }
+
+            // Determinar tipo de máquina (melhorado)
+            const machineMatches = text.match(patterns.machines) || [];
+            const tornoCount = machineMatches.filter(m => 
+                m.toLowerCase().includes('torno')
+            ).length;
+            const centroCount = machineMatches.filter(m => 
+                m.toLowerCase().includes('centro') || m.toLowerCase().includes('usinagem')
+            ).length;
+
+            if (tornoCount > centroCount && centroCount === 0) {
+                candidate.machineType = 'torno';
+            } else if (centroCount > tornoCount && tornoCount === 0) {
+                candidate.machineType = 'centro';
+            } else if (tornoCount > 0 || centroCount > 0) {
+                candidate.machineType = 'ambos';
+            } else {
+                candidate.machineType = 'nao_especificado';
+            }
+
+            // Extrair educação
+            const educationMatch = text.match(patterns.education);
+            if (educationMatch) {
+                candidate.education = educationMatch[1];
+            } else if (text.toLowerCase().includes('médio')) {
+                candidate.education = 'Ensino Médio';
+            }
+
+            // Contar cursos SENAI
+            const senaiMatches = text.match(patterns.senaiCourse) || [];
+            candidate.senaiCourses = senaiMatches.length;
+
+            // Extrair empresas relevantes
+            const companyMatches = text.match(patterns.companies) || [];
+            candidate.companies = [...new Set(companyMatches)]; // Remove duplicatas
+
+            // Calcular experiência (melhorado)
+            let totalExperience = 0;
+            let experienceMatches = [];
+            let match;
+            
+            const experienceRegex = new RegExp(patterns.experience);
+            while ((match = experienceRegex.exec(text)) !== null) {
+                experienceMatches.push(match);
+            }
+
+            experienceMatches.forEach(match => {
+                let startYear, endYear;
+                
+                if (match[1] && match[2]) {
+                    // Formato: 2020 - 2024
+                    startYear = parseInt(match[1]);
+                    endYear = match[2] === 'atual' || match[2].toLowerCase().includes('presente') ? 2025 : parseInt(match[2]);
+                } else if (match[3] && match[4] && match[5] && match[6]) {
+                    // Formato: Período: 01/2020 à 12/2024
+                    startYear = parseInt(match[4]);
+                    endYear = parseInt(match[6]);
+                }
+                
+                if (startYear && endYear && endYear >= startYear && startYear > 1990 && startYear < 2025) {
+                    const years = Math.min(endYear - startYear, 25); // Cap individual em 25 anos
+                    if (years > 0) {
+                        totalExperience += years;
+                    }
+                }
+            });
+
+            // Se não encontrou experiência por datas, tentar extrair de outras formas
+            if (totalExperience === 0) {
+                const expText = text.toLowerCase();
+                if (expText.includes('mais de') && expText.includes('anos')) {
+                    const moreYearsMatch = text.match(/mais de (\d+) anos/i);
+                    if (moreYearsMatch) {
+                        totalExperience = parseInt(moreYearsMatch[1]);
+                    }
+                }
+            }
+
+            candidate.experienceYears = Math.min(totalExperience, 30); // Cap total em 30 anos
+
+            return candidate;
+        }
+
+        function generateDashboard() {
+            // Remover candidatos duplicados baseado no nome
+            analyzedData = removeDuplicates(analyzedData);
+            
+            updateStats();
+            createCharts();
+            createCandidateTable();
+            populateFilters();
+            
+            // Mostrar feedback sobre o processamento
+            console.log(`✅ Análise concluída: ${analyzedData.length} candidatos únicos processados`);
+        }
+
+        function removeDuplicates(candidates) {
+            const seen = new Set();
+            return candidates.filter(candidate => {
+                const key = candidate.name.toLowerCase().trim();
+                if (seen.has(key) || key.length < 3) {
+                    return false;
+                }
+                seen.add(key);
+                return true;
+            });
+        }
+
+        function updateStats() {
+            const total = analyzedData.length;
+            const preparadores = analyzedData.filter(c => c.profile === 'preparador').length;
+            const operadores = analyzedData.filter(c => c.profile === 'operador').length;
+            const avgAge = Math.round(analyzedData.reduce((sum, c) => sum + c.age, 0) / total);
+            const avgExp = Math.round(analyzedData.reduce((sum, c) => sum + c.experienceYears, 0) / total);
+
+            document.getElementById('totalCandidates').textContent = total;
+            document.getElementById('preparadorCount').textContent = preparadores;
+            document.getElementById('operadorCount').textContent = operadores;
+            document.getElementById('avgAge').textContent = avgAge || 0;
+            document.getElementById('avgExperience').textContent = avgExp || 0;
+        }
+
+        function createCharts() {
+            // Gráfico de perfis
+            const profileData = {
+                labels: ['Preparador CNC', 'Operador CNC', 'Multifuncional'],
+                datasets: [{
+                    data: [
+                        analyzedData.filter(c => c.profile === 'preparador').length,
+                        analyzedData.filter(c => c.profile === 'operador').length,
+                        analyzedData.filter(c => c.profile === 'mixed').length
+                    ],
+                    backgroundColor: ['#27ae60', '#2196f3', '#ff9800'],
+                    borderWidth: 0
+                }]
+            };
+
+            charts.profile = new Chart(document.getElementById('profileChart'), {
+                type: 'doughnut',
+                data: profileData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de máquinas
+            const machineData = {
+                labels: ['Torno CNC', 'Centro de Usinagem', 'Ambos'],
+                datasets: [{
+                    data: [
+                        analyzedData.filter(c => c.machineType === 'torno').length,
+                        analyzedData.filter(c => c.machineType === 'centro').length,
+                        analyzedData.filter(c => c.machineType === 'ambos').length
+                    ],
+                    backgroundColor: ['#e74c3c', '#9b59b6', '#34495e'],
+                    borderWidth: 0
+                }]
+            };
+
+            charts.machine = new Chart(document.getElementById('machineChart'), {
+                type: 'pie',
+                data: machineData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de idades
+            const ageRanges = ['18-25', '26-35', '36-45', '46+'];
+            const ageData = {
+                labels: ageRanges,
+                datasets: [{
+                    label: 'Candidatos',
+                    data: [
+                        analyzedData.filter(c => c.age >= 18 && c.age <= 25).length,
+                        analyzedData.filter(c => c.age >= 26 && c.age <= 35).length,
+                        analyzedData.filter(c => c.age >= 36 && c.age <= 45).length,
+                        analyzedData.filter(c => c.age >= 46).length
+                    ],
+                    backgroundColor: '#3498db',
+                    borderRadius: 5
+                }]
+            };
+
+            charts.age = new Chart(document.getElementById('ageChart'), {
+                type: 'bar',
+                data: ageData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de educação
+            const educationCounts = {};
+            analyzedData.forEach(c => {
+                const edu = c.education || 'Não informado';
+                educationCounts[edu] = (educationCounts[edu] || 0) + 1;
+            });
+
+            charts.education = new Chart(document.getElementById('educationChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(educationCounts),
+                    datasets: [{
+                        data: Object.values(educationCounts),
+                        backgroundColor: ['#1abc9c', '#f39c12', '#e67e22', '#95a5a6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de localização
+            const locationCounts = {};
+            analyzedData.forEach(c => {
+                const city = c.city || 'Não informado';
+                locationCounts[city] = (locationCounts[city] || 0) + 1;
+            });
+
+            charts.location = new Chart(document.getElementById('locationChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(locationCounts),
+                    datasets: [{
+                        label: 'Candidatos',
+                        data: Object.values(locationCounts),
+                        backgroundColor: '#16a085',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de experiência
+            const expRanges = ['0-2 anos', '3-5 anos', '6-10 anos', '11+ anos'];
+            const expData = {
+                labels: expRanges,
+                datasets: [{
+                    label: 'Candidatos',
+                    data: [
+                        analyzedData.filter(c => c.experienceYears >= 0 && c.experienceYears <= 2).length,
+                        analyzedData.filter(c => c.experienceYears >= 3 && c.experienceYears <= 5).length,
+                        analyzedData.filter(c => c.experienceYears >= 6 && c.experienceYears <= 10).length,
+                        analyzedData.filter(c => c.experienceYears >= 11).length
+                    ],
+                    backgroundColor: '#8e44ad',
+                    borderRadius: 5
+                }]
+            };
+
+            charts.experience = new Chart(document.getElementById('experienceChart'), {
+                type: 'bar',
+                data: expData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCandidateTable() {
+            const table = document.getElementById('candidateTable');
+            
+            // Ordenar candidatos por experiência
+            const sortedData = [...analyzedData].sort((a, b) => b.experienceYears - a.experienceYears);
+            
+            table.innerHTML = sortedData.map(candidate => `
+                <div class="candidate-row">
+                    <div class="candidate-name">${candidate.name || 'Nome não identificado'}</div>
+                    <div class="candidate-profile profile-${candidate.profile}">
+                        ${candidate.profile === 'preparador' ? 'Preparador' : 
+                          candidate.profile === 'operador' ? 'Operador' : 'Multifuncional'}
+                    </div>
+                    <div class="machine-type">${getMachineLabel(candidate.machineType)}</div>
+                    <div class="experience-years">${candidate.experienceYears} anos</div>
+                    <div>${candidate.age || '?'} anos</div>
+                    <div>${candidate.city || 'Não informado'}</div>
+                </div>
+            `).join('');
+        }
+
+        function getMachineLabel(type) {
+            switch(type) {
+                case 'torno': return '🔧 Torno CNC';
+                case 'centro': return '⚙️ Centro Usinagem';
+                case 'ambos': return '🔧⚙️ Ambos';
+                case 'nao_especificado': return '❓ Não especificado';
+                default: return '❓ Não especificado';
+            }
+        }
+
+        function populateFilters() {
+            // Popular filtro de cidades
+            const cities = [...new Set(analyzedData.map(c => c.city).filter(c => c))];
+            const cityFilter = document.getElementById('cityFilter');
+            
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                cityFilter.appendChild(option);
+            });
+        }
+
+        function applyFilters() {
+            // Esta função seria implementada para filtrar os dados e atualizar os gráficos
+            // Por ora, deixaremos como placeholder
+            console.log('Aplicando filtros...');
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard').classList.add('active');
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('analyzeBtn').disabled = false;
+        }
+    </script>
+</body>
+</html>
