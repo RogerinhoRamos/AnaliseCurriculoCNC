@@ -1731,13 +1731,13 @@
 
         function splitUnifiedPDF(fullText, filename) {
             debugLog('Iniciando divisão do PDF...');
-            
+
+
             const candidateSeparators = [
-                /(?=\n\d+\.\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ\s]+\s+Cand-\d+)/g,
-                /(?=\n[A-ZÁÊÀÍÓÚ][A-ZÁÊÀÍÓÚÇÃÕ\s]{8,50}\n.*?(?:Brasileiro|Idade|anos|Data|Endereço|Objetivo))/g,
-                /(?=Objetivo\s*Profissional|OBJETIVO)/gi,
-                /(?=.*?Cand-\d+)/g
-            ];
+                  /(?=\d+\.\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]+(?:\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]+)+\s+Cand-\d+)/g
+                ];
+
+
 
             let candidates = [];
             let bestSplit = [fullText];
