@@ -240,61 +240,173 @@
             font-weight: 600;
         }
 
+        .ranking-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .category-legend {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-color.a {
+            background: #f1c40f;
+        }
+
+        .legend-color.b {
+            background: #95a5a6;
+        }
+
+        .legend-color.c {
+            background: #e67e22;
+        }
+
+        .legend-color.d {
+            background: #e74c3c;
+        }
+
         .table-content {
-            max-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
+        }
+
+        .table-header-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr 1fr 1fr 1.5fr;
+            gap: 15px;
+            padding: 15px 20px;
+            background: #2c3e50;
+            color: white;
+            font-weight: 600;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-cell {
+            font-size: 0.9rem;
+            text-align: center;
         }
 
         .candidate-row {
             padding: 15px 20px;
             border-bottom: 1px solid #ecf0f1;
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 2fr;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr 1fr 1fr 1.5fr;
             gap: 15px;
             align-items: center;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .candidate-row:hover {
             background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .candidate-row.a {
+            border-left: 4px solid #f1c40f;
+            background: linear-gradient(90deg, #fff9e6, transparent);
+        }
+
+        .candidate-row.b {
+            border-left: 4px solid #95a5a6;
+            background: linear-gradient(90deg, #f8f9fa, transparent);
+        }
+
+        .candidate-row.c {
+            border-left: 4px solid #e67e22;
+            background: linear-gradient(90deg, #fef5f0, transparent);
+        }
+
+        .candidate-row.d {
+            border-left: 4px solid #e74c3c;
+            background: linear-gradient(90deg, #fdf2f2, transparent);
         }
 
         .candidate-name {
             font-weight: 600;
             color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .candidate-profile {
-            padding: 4px 12px;
-            border-radius: 20px;
+        .rank-badge {
+            background: #3498db;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: bold;
+        }
+
+        .candidate-category {
+            text-align: center;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .category-a {
+            background: #f1c40f;
+            color: white;
+        }
+
+        .category-b {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .category-c {
+            background: #e67e22;
+            color: white;
+        }
+
+        .category-d {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .candidate-score {
             text-align: center;
         }
 
-        .profile-preparador {
-            background: #e8f5e8;
-            color: #27ae60;
-        }
-
-        .profile-operador {
-            background: #e3f2fd;
-            color: #2196f3;
-        }
-
-        .profile-mixed {
-            background: #fff3e0;
-            color: #ff9800;
-        }
-
-        .machine-type {
+        .score-badge {
+            background: #ecf0f1;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            color: #2c3e50;
             font-size: 0.9rem;
+        }
+
+        .candidate-age, .candidate-city {
+            text-align: center;
             color: #7f8c8d;
+            font-size: 0.9rem;
         }
 
         .experience-years {
+            text-align: center;
+            color: #8e44ad;
             font-weight: 600;
-            color: #2c3e50;
         }
 
         .loading {
@@ -431,11 +543,79 @@
             .charts-grid {
                 grid-template-columns: 1fr;
             }
-            
+
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .tab-button {
+                text-align: center;
+                margin-bottom: 5px;
+            }
+
+            .table-header-row,
             .candidate-row {
                 grid-template-columns: 1fr;
                 gap: 10px;
                 text-align: center;
+                padding: 15px;
+            }
+
+            .table-header-row {
+                display: none; /* Hide header on mobile for better UX */
+            }
+
+            .candidate-row {
+                display: block;
+                border: 1px solid #ecf0f1;
+                border-radius: 10px;
+                margin-bottom: 10px;
+                padding: 15px;
+            }
+
+            .candidate-name {
+                justify-content: center;
+                margin-bottom: 10px;
+                font-size: 1.1rem;
+            }
+
+            .candidate-row > div {
+                margin-bottom: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .candidate-row > div::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: #7f8c8d;
+                font-size: 0.8rem;
+            }
+
+            .phase-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .phase-header h3 {
+                font-size: 1.1rem;
+            }
+
+            .conclusion-points {
+                gap: 10px;
+            }
+
+            .conclusion-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
             }
 
             .footer {
@@ -528,6 +708,18 @@
                     <span class="stat-number" id="avgExperience">0</span>
                     <div class="stat-label">Anos Experiência Média</div>
                 </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="versatileCount">0</span>
+                    <div class="stat-label">Profissionais Versáteis</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="categoryACount">0</span>
+                    <div class="stat-label">Categoria A (Premium)</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="regionalCount">0%</span>
+                    <div class="stat-label">Concentração Regional</div>
+                </div>
             </div>
 
             <div class="charts-grid">
@@ -559,7 +751,15 @@
 
             <div class="candidate-table">
                 <div class="table-header">
-                    👨‍💼 Ranking de Candidatos
+                    👨‍💼 Ranking de Candidatos por Score
+                    <div class="ranking-info">
+                        <span class="category-legend">
+                            <span class="legend-item"><span class="legend-color a"></span>A: Premium (80+)</span>
+                            <span class="legend-item"><span class="legend-color b"></span>B: Sólido (65-79)</span>
+                            <span class="legend-item"><span class="legend-color c"></span>C: Potencial (50-64)</span>
+                            <span class="legend-item"><span class="legend-color d"></span>D: Básico (&lt;50)</span>
+                        </span>
+                    </div>
                 </div>
                 <div class="table-content" id="candidateTable">
                     <!-- Tabela será preenchida dinamicamente -->
@@ -808,19 +1008,19 @@
         }
 
         function extractCandidateInfo(text, filename) {
-            // Padrões de regex melhorados para o formato específico
+            // Padrões de regex aprimorados baseados na análise real do PDF
             const patterns = {
                 name: /(?:Nome.*?candidato|^\d+\.\s*)([A-ZÁÊÀ][a-záêàçãõéíóú\s]+?)(?:\s*Cand-\d+|\n|Idade|Data|Brasileiro|Estado|Endereço|Rua|Objetivo|•)/i,
-                alternativeName: /([A-ZÁÊÀ][A-ZÁÊÀÇÃÕÉÍÓÚ\s]{5,50})(?:\s*•|\s*Casado|\s*Solteiro|\s*Brasileiro|\s*\d+\s*anos)/,
+                alternativeName: /([A-ZÁÊÀ][A-ZÁÊÀÇÃÕÉÍÓÚ\s]{8,50})(?:\s*•|\s*Casado|\s*Solteiro|\s*Brasileiro|\s*\d+\s*anos)/,
                 candidateId: /Cand-(\d+)/,
-                age: /(\d{1,2})\s*anos?|Data.*?(\d{2})\/(\d{2})\/(\d{4})|Nascimento.*?(\d{2})\/(\d{2})\/(\d{4})|(\d{4})\s*[-–]\s*Casado/i,
-                city: /(Jundiaí|Várzea Paulista|Campo Limpo Paulista|Campo Limpo|Cajamar|Itupeva|Franco da Rocha|São Paulo|Cabreúva|Louveira|Itatiba|Sorocaba|Campinas|Santos|Indaiatuba)/i,
-                profile: /(Preparador|Operador|PREPARADOR|OPERADOR|Prep\.Op\.CNC|Multifuncional)/gi,
-                machines: /(Torno CNC|Centro de Usinagem|Torno Vertical|Torno Horizontal|centro de usinagem|torno cnc|CNC|Retífica|Fresadora)/gi,
-                education: /(Ensino Médio|Superior|Técnico|Graduação|Engenharia|Tecnólogo)/i,
+                age: /(\d{1,2})\s*anos?|Data.*?(\d{2})\/(\d{2})\/(\d{4})|Nascimento.*?(\d{2})\/(\d{2})\/(\d{4})|(\d{4})\s*[-–]\s*(Casado|Solteiro)/i,
+                city: /(Jundiaí|Várzea Paulista|Campo Limpo Paulista|Campo Limpo|Cajamar|Itupeva|Franco da Rocha|São Paulo|Cabreúva|Louveira|Itatiba|Sorocaba|Campinas|Santos|Indaiatuba|Parelheiros)/i,
+                profile: /(Preparador|Operador|PREPARADOR|OPERADOR|Prep\.Op\.CNC|Multifuncional|Setup|Preset)/gi,
+                machines: /(Torno CNC|Centro de Usinagem|Torno Vertical|Torno Horizontal|centro de usinagem|torno cnc|CNC|Retífica|Fresadora|Mandriladora)/gi,
+                education: /(Ensino Médio|Superior|Técnico|Graduação|Engenharia|Tecnólogo|Bacharel)/i,
                 experience: /(\d{4})\s*[-–]\s*(\d{4}|atual|presente|\w+)|Período.*?(\d{1,2})\/(\d{4}).*?(\d{1,2})\/(\d{4})|(\d{2}\/\d{2}\/\d{4})\s*[-–]\s*(\d{2}\/\d{2}\/\d{4})/g,
-                senaiCourse: /(SENAI|Senai).*?(Programação|Operação|Torno|Centro|Usinagem|CNC)/gi,
-                companies: /(ThyssenKrupp|SKF|Continental|Dana|Knorr|Sifco|Dexco|Klabin|Joyson)/gi
+                senaiCourse: /(SENAI|Senai).*?(Programação|Operação|Torno|Centro|Usinagem|CNC|Mecânica)/gi,
+                companies: /(ThyssenKrupp|SKF|Continental|Dana|Knorr|Sifco|Dexco|Klabin|Joyson|Alpino|Procter|Gamble)/gi
             };
 
             const candidate = {
@@ -834,8 +1034,25 @@
                 candidateId: '',
                 filename: filename,
                 senaiCourses: 0,
-                companies: []
+                companies: [],
+                score: 0,
+                category: '',
+                strengths: []
             };
+
+            // Extrair e normalizar nome
+            let nameMatch = text.match(patterns.name);
+            if (!nameMatch) {
+                nameMatch = text.match(patterns.alternativeName);
+            }
+            if (nameMatch) {
+                let name = nameMatch[1].trim();
+                // Normalizar nome: primeira letra maiúscula, resto minúscula
+                name = name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+                // Limpar caracteres especiais
+                name = name.replace(/[•\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim();
+                candidate.name = name.split(' ').slice(0, 4).join(' ');
+            }
 
             // Extrair ID do candidato
             const idMatch = text.match(patterns.candidateId);
@@ -843,29 +1060,17 @@
                 candidate.candidateId = idMatch[1];
             }
 
-            // Extrair nome (melhorado)
-            let nameMatch = text.match(patterns.name);
-            if (!nameMatch) {
-                nameMatch = text.match(patterns.alternativeName);
-            }
-            if (nameMatch) {
-                let name = nameMatch[1].trim();
-                // Limpar nome de caracteres especiais e normalizar
-                name = name.replace(/[•\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim();
-                candidate.name = name.split(' ').slice(0, 4).join(' '); // Máximo 4 palavras
-            }
-
-            // Extrair idade (melhorado)
+            // Extrair idade com múltiplas estratégias
             const ageMatch = text.match(patterns.age);
             if (ageMatch) {
                 if (ageMatch[1]) {
                     candidate.age = parseInt(ageMatch[1]);
-                } else if (ageMatch[4]) { // Data de nascimento DD/MM/YYYY
+                } else if (ageMatch[4]) {
                     const birthYear = parseInt(ageMatch[4]);
                     if (birthYear > 1940 && birthYear < 2010) {
                         candidate.age = 2025 - birthYear;
                     }
-                } else if (ageMatch[7]) { // Formato alternativo
+                } else if (ageMatch[7]) {
                     const birthYear = parseInt(ageMatch[7]);
                     if (birthYear > 1940 && birthYear < 2010) {
                         candidate.age = 2025 - birthYear;
@@ -879,10 +1084,13 @@
                 candidate.city = cityMatch[1];
             }
 
-            // Determinar perfil (melhorado)
+            // Determinar perfil com lógica aprimorada
             const profileMatches = text.match(patterns.profile) || [];
             const preparadorCount = profileMatches.filter(p => 
-                p.toLowerCase().includes('preparador') || p.toLowerCase().includes('prep')
+                p.toLowerCase().includes('preparador') || 
+                p.toLowerCase().includes('prep') ||
+                p.toLowerCase().includes('setup') ||
+                p.toLowerCase().includes('preset')
             ).length;
             const operadorCount = profileMatches.filter(p => 
                 p.toLowerCase().includes('operador') && !p.toLowerCase().includes('preparador')
@@ -891,24 +1099,19 @@
                 p.toLowerCase().includes('multifuncional')
             ).length;
 
+            // Determinar perfil baseado no contexto
             if (multifuncionalCount > 0 || (preparadorCount > 0 && operadorCount > 0)) {
                 candidate.profile = 'mixed';
-            } else if (preparadorCount > operadorCount) {
+            } else if (preparadorCount > operadorCount || text.toLowerCase().includes('preparação')) {
                 candidate.profile = 'preparador';
-            } else if (operadorCount > 0) {
+            } else if (operadorCount > 0 || text.toLowerCase().includes('operação')) {
                 candidate.profile = 'operador';
             } else {
-                // Inferir pelo título ou contexto
-                if (text.toLowerCase().includes('prep.op.cnc') || text.toLowerCase().includes('preparador')) {
-                    candidate.profile = 'preparador';
-                } else if (text.toLowerCase().includes('operador')) {
-                    candidate.profile = 'operador';
-                } else {
-                    candidate.profile = 'mixed';
-                }
+                // Inferir pelo contexto se não encontrou explicitamente
+                candidate.profile = 'operador'; // Default mais comum
             }
 
-            // Determinar tipo de máquina (melhorado)
+            // Determinar tipo de máquina com análise contextual
             const machineMatches = text.match(patterns.machines) || [];
             const tornoCount = machineMatches.filter(m => 
                 m.toLowerCase().includes('torno')
@@ -917,20 +1120,33 @@
                 m.toLowerCase().includes('centro') || m.toLowerCase().includes('usinagem')
             ).length;
 
-            if (tornoCount > centroCount && centroCount === 0) {
+            if (tornoCount > 0 && centroCount > 0) {
+                candidate.machineType = 'ambos';
+                candidate.strengths.push('Versátil');
+            } else if (tornoCount > centroCount && centroCount === 0) {
                 candidate.machineType = 'torno';
             } else if (centroCount > tornoCount && tornoCount === 0) {
                 candidate.machineType = 'centro';
             } else if (tornoCount > 0 || centroCount > 0) {
                 candidate.machineType = 'ambos';
+                candidate.strengths.push('Versátil');
             } else {
                 candidate.machineType = 'nao_especificado';
             }
 
-            // Extrair educação
+            // Extrair educação com prioridade
             const educationMatch = text.match(patterns.education);
             if (educationMatch) {
-                candidate.education = educationMatch[1];
+                const edu = educationMatch[1].toLowerCase();
+                if (edu.includes('superior') || edu.includes('engenharia') || edu.includes('bacharel')) {
+                    candidate.education = 'Superior';
+                    candidate.strengths.push('Formação Superior');
+                } else if (edu.includes('técnico')) {
+                    candidate.education = 'Técnico';
+                    candidate.strengths.push('Formação Técnica');
+                } else {
+                    candidate.education = 'Ensino Médio';
+                }
             } else if (text.toLowerCase().includes('médio')) {
                 candidate.education = 'Ensino Médio';
             }
@@ -938,12 +1154,18 @@
             // Contar cursos SENAI
             const senaiMatches = text.match(patterns.senaiCourse) || [];
             candidate.senaiCourses = senaiMatches.length;
+            if (candidate.senaiCourses > 2) {
+                candidate.strengths.push('Múltiplos Cursos SENAI');
+            }
 
             // Extrair empresas relevantes
             const companyMatches = text.match(patterns.companies) || [];
-            candidate.companies = [...new Set(companyMatches)]; // Remove duplicatas
+            candidate.companies = [...new Set(companyMatches)];
+            if (candidate.companies.length > 2) {
+                candidate.strengths.push('Experiência Diversificada');
+            }
 
-            // Calcular experiência (melhorado)
+            // Calcular experiência com algoritmo aprimorado
             let totalExperience = 0;
             let experienceMatches = [];
             let match;
@@ -957,61 +1179,485 @@
                 let startYear, endYear;
                 
                 if (match[1] && match[2]) {
-                    // Formato: 2020 - 2024
                     startYear = parseInt(match[1]);
                     endYear = match[2] === 'atual' || match[2].toLowerCase().includes('presente') ? 2025 : parseInt(match[2]);
                 } else if (match[3] && match[4] && match[5] && match[6]) {
-                    // Formato: Período: 01/2020 à 12/2024
                     startYear = parseInt(match[4]);
                     endYear = parseInt(match[6]);
                 }
                 
                 if (startYear && endYear && endYear >= startYear && startYear > 1990 && startYear < 2025) {
-                    const years = Math.min(endYear - startYear, 25); // Cap individual em 25 anos
+                    const years = Math.min(endYear - startYear, 25);
                     if (years > 0) {
                         totalExperience += years;
                     }
                 }
             });
 
-            // Se não encontrou experiência por datas, tentar extrair de outras formas
-            if (totalExperience === 0) {
-                const expText = text.toLowerCase();
-                if (expText.includes('mais de') && expText.includes('anos')) {
-                    const moreYearsMatch = text.match(/mais de (\d+) anos/i);
-                    if (moreYearsMatch) {
-                        totalExperience = parseInt(moreYearsMatch[1]);
-                    }
-                }
-            }
+            candidate.experienceYears = Math.min(totalExperience, 30);
 
-            candidate.experienceYears = Math.min(totalExperience, 30); // Cap total em 30 anos
+            // Sistema de pontuação e categorização
+            candidate.score = calculateCandidateScore(candidate);
+            candidate.category = categorizeCandidateByScore(candidate);
 
             return candidate;
         }
 
+        function calculateCandidateScore(candidate) {
+            let score = 0;
+            
+            // Pontuação por experiência (40% do score)
+            if (candidate.experienceYears >= 20) score += 40;
+            else if (candidate.experienceYears >= 15) score += 35;
+            else if (candidate.experienceYears >= 10) score += 30;
+            else if (candidate.experienceYears >= 5) score += 20;
+            else if (candidate.experienceYears >= 2) score += 10;
+            
+            // Pontuação por perfil (20% do score)
+            if (candidate.profile === 'preparador') score += 20;
+            else if (candidate.profile === 'mixed') score += 18;
+            else if (candidate.profile === 'operador') score += 15;
+            
+            // Pontuação por versatilidade (15% do score)
+            if (candidate.machineType === 'ambos') score += 15;
+            else if (candidate.machineType === 'centro') score += 10;
+            else if (candidate.machineType === 'torno') score += 8;
+            
+            // Pontuação por educação (15% do score)
+            if (candidate.education === 'Superior') score += 15;
+            else if (candidate.education === 'Técnico') score += 10;
+            else if (candidate.education === 'Ensino Médio') score += 5;
+            
+            // Bonificações (10% do score)
+            if (candidate.senaiCourses >= 3) score += 5;
+            if (candidate.companies.length >= 3) score += 3;
+            if (candidate.age >= 25 && candidate.age <= 40) score += 2; // Idade ideal
+            
+            return Math.round(score);
+        }
+
+        function categorizeCandidateByScore(candidate) {
+            if (candidate.score >= 80) return 'A';
+            else if (candidate.score >= 65) return 'B';
+            else if (candidate.score >= 50) return 'C';
+            else return 'D';
+        }
+
         function generateDashboard() {
-            // Remover candidatos duplicados baseado no nome
+            // Remover candidatos duplicados baseado no nome normalizado
             analyzedData = removeDuplicates(analyzedData);
             
             updateStats();
             createCharts();
             createCandidateTable();
+            createStrategicInsights();
+            createTopCandidates();
+            createHiringStrategy();
             populateFilters();
             
-            // Mostrar feedback sobre o processamento
             console.log(`✅ Análise concluída: ${analyzedData.length} candidatos únicos processados`);
+        }
+
+        function createHiringStrategy() {
+            const categoryA = analyzedData.filter(c => c.category === 'A');
+            const seniorPreparers = analyzedData.filter(c => c.profile === 'preparador' && c.experienceYears >= 15);
+            const youngTalents = analyzedData.filter(c => c.age <= 30 && c.experienceYears >= 3);
+            const engineers = analyzedData.filter(c => c.education === 'Superior');
+            
+            const strategyHtml = `
+                <div class="hiring-strategy">
+                    <div class="strategy-header">
+                        <h2>📋 Estratégia de Contratação Recomendada</h2>
+                        <p>Baseada na análise de ${analyzedData.length} candidatos qualificados</p>
+                    </div>
+                    
+                    <div class="strategy-phases">
+                        <div class="phase-card priority">
+                            <div class="phase-header">
+                                <h3>🚀 FASE 1 - Contratações Prioritárias (2-3 pessoas)</h3>
+                                <span class="phase-timeline">Imediato</span>
+                            </div>
+                            <div class="recommendations">
+                                <div class="recommendation">
+                                    <strong>1 Preparador Senior:</strong> 
+                                    ${seniorPreparers.slice(0, 2).map(c => c.name).join(' ou ')}
+                                    <div class="reason">→ Liderança técnica e formação de equipe</div>
+                                </div>
+                                <div class="recommendation">
+                                    <strong>1 Jovem Talento:</strong> 
+                                    ${youngTalents.slice(0, 2).map(c => `${c.name} (${c.age} anos)`).join(' ou ')}
+                                    <div class="reason">→ Renovação e potencial de crescimento</div>
+                                </div>
+                                <div class="recommendation">
+                                    <strong>1 Categoria A:</strong> 
+                                    ${categoryA.slice(0, 2).map(c => `${c.name} (Score: ${c.score})`).join(' ou ')}
+                                    <div class="reason">→ Máxima qualificação e versatilidade</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="phase-card expansion">
+                            <div class="phase-header">
+                                <h3>📈 FASE 2 - Expansão da Equipe (3-4 pessoas)</h3>
+                                <span class="phase-timeline">30-60 dias</span>
+                            </div>
+                            <div class="recommendations">
+                                <div class="recommendation">
+                                    <strong>Operadores Experientes:</strong> 
+                                    Foco em candidatos com 10+ anos de experiência
+                                    <div class="reason">→ Estabilidade operacional</div>
+                                </div>
+                                <div class="recommendation">
+                                    <strong>Profissionais Versáteis:</strong> 
+                                    ${Math.round((analyzedData.filter(c => c.machineType === 'ambos').length / analyzedData.length) * 100)}% dos candidatos trabalham com ambas máquinas
+                                    <div class="reason">→ Flexibilidade operacional máxima</div>
+                                </div>
+                                <div class="recommendation">
+                                    <strong>Formação Superior:</strong> 
+                                    ${engineers.length} candidatos com nível superior disponíveis
+                                    <div class="reason">→ Capacidade analítica e inovação</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="phase-card development">
+                            <div class="phase-header">
+                                <h3>🎯 FASE 3 - Desenvolvimento Contínuo</h3>
+                                <span class="phase-timeline">Ongoing</span>
+                            </div>
+                            <div class="recommendations">
+                                <div class="recommendation">
+                                    <strong>Programa de Multifuncionais:</strong> 
+                                    Apenas ${analyzedData.filter(c => c.profile === 'mixed').length} candidatos multifuncionais
+                                    <div class="reason">→ Oportunidade de desenvolvimento interno</div>
+                                </div>
+                                <div class="recommendation">
+                                    <strong>Capacitação Técnica:</strong> 
+                                    ${Math.round((analyzedData.filter(c => c.education === 'Ensino Médio').length / analyzedData.length) * 100)}% têm apenas ensino médio
+                                    <div class="reason">→ Investimento em cursos técnicos/superiores</div>
+                                </div>
+                                <div class="recommendation">
+                                    <strong>Sucessão e Liderança:</strong> 
+                                    Preparar jovens talentos para cargos de preparação
+                                    <div class="reason">→ Continuidade e crescimento da operação</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="conclusion">
+                        <h3>💡 Conclusão Executiva</h3>
+                        <div class="conclusion-points">
+                            <div class="conclusion-item excellent">
+                                <span class="icon">✅</span>
+                                <div>
+                                    <strong>Pool Excelente:</strong> ${analyzedData.length} candidatos qualificados com ${Math.round(analyzedData.reduce((sum, c) => sum + c.experienceYears, 0) / analyzedData.length)} anos de experiência média
+                                </div>
+                            </div>
+                            <div class="conclusion-item good">
+                                <span class="icon">🎯</span>
+                                <div>
+                                    <strong>Versatilidade:</strong> ${Math.round((analyzedData.filter(c => c.machineType === 'ambos').length / analyzedData.length) * 100)}% trabalham com ambas máquinas (Torno + Centro)
+                                </div>
+                            </div>
+                            <div class="conclusion-item strategic">
+                                <span class="icon">📍</span>
+                                <div>
+                                    <strong>Logística Favorável:</strong> ${Math.round((analyzedData.filter(c => ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista'].includes(c.city)).length / analyzedData.length) * 100)}% concentrados na região
+                                </div>
+                            </div>
+                            <div class="conclusion-item recommendation">
+                                <span class="icon">🚀</span>
+                                <div>
+                                    <strong>Recomendação:</strong> Priorizar Categoria A e profissionais versáteis para máxima eficiência operacional
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Inserir no final do dashboard
+            const dashboard = document.getElementById('dashboard');
+            dashboard.appendChild(createElementFromHTML(strategyHtml));
         }
 
         function removeDuplicates(candidates) {
             const seen = new Set();
             return candidates.filter(candidate => {
-                const key = candidate.name.toLowerCase().trim();
-                if (seen.has(key) || key.length < 3) {
+                // Normalizar nome para comparação
+                const normalizedName = candidate.name.toLowerCase()
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                
+                if (seen.has(normalizedName) || normalizedName.length < 3) {
                     return false;
                 }
-                seen.add(key);
+                seen.add(normalizedName);
                 return true;
+            });
+        }
+
+        function createStrategicInsights() {
+            const insightsHtml = `
+                <div class="strategic-insights">
+                    <div class="insights-header">
+                        <h2>🎯 Insights Estratégicos</h2>
+                    </div>
+                    <div class="insights-grid">
+                        <div class="insight-card strengths">
+                            <h3>✅ Pontos Fortes</h3>
+                            <ul>
+                                <li><strong>${Math.round((analyzedData.filter(c => c.machineType === 'ambos').length / analyzedData.length) * 100)}% são versáteis</strong> (trabalham com ambas máquinas)</li>
+                                <li><strong>${Math.round((analyzedData.filter(c => ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista'].includes(c.city)).length / analyzedData.length) * 100)}% estão na região</strong> (logística favorável)</li>
+                                <li><strong>Experiência sólida:</strong> ${Math.round(analyzedData.reduce((sum, c) => sum + c.experienceYears, 0) / analyzedData.length)} anos de média</li>
+                                <li><strong>${analyzedData.filter(c => c.education === 'Superior').length} candidatos com formação superior</strong></li>
+                                <li><strong>Pool robusto:</strong> ${analyzedData.length} candidatos qualificados</li>
+                            </ul>
+                        </div>
+                        <div class="insight-card attention">
+                            <h3>⚠️ Pontos de Atenção</h3>
+                            <ul>
+                                <li><strong>Idade média elevada:</strong> ${Math.round(analyzedData.reduce((sum, c) => sum + c.age, 0) / analyzedData.length)} anos - equilibrar com jovens</li>
+                                <li><strong>Poucos multifuncionais:</strong> ${analyzedData.filter(c => c.profile === 'mixed').length} candidatos - oportunidade de desenvolvimento</li>
+                                <li><strong>Predominância ensino médio:</strong> ${Math.round((analyzedData.filter(c => c.education === 'Ensino Médio').length / analyzedData.length) * 100)}% - investir em capacitação</li>
+                                <li><strong>Especialização necessária:</strong> equilibrar generalistas vs especialistas</li>
+                            </ul>
+                        </div>
+                        <div class="insight-card recommendations">
+                            <h3>🚀 Recomendações</h3>
+                            <ul>
+                                <li><strong>Priorizar versáteis</strong> (ambas máquinas) para flexibilidade</li>
+                                <li><strong>Equilibrar gerações:</strong> seniors (experiência) + juniors (inovação)</li>
+                                <li><strong>Focar na região:</strong> Várzea Paulista/Jundiaí (menor deslocamento)</li>
+                                <li><strong>Investir em multifuncionais:</strong> preparador + operador</li>
+                                <li><strong>Valorizar formação técnica/superior</strong> quando disponível</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Inserir antes da tabela de candidatos
+            const dashboard = document.getElementById('dashboard');
+            const candidateTable = document.querySelector('.candidate-table');
+            dashboard.insertBefore(createElementFromHTML(insightsHtml), candidateTable);
+        }
+
+        function createTopCandidates() {
+            // Separar candidatos por categoria baseado no score
+            const categoryA = analyzedData.filter(c => c.category === 'A').sort((a, b) => b.score - a.score);
+            const categoryB = analyzedData.filter(c => c.category === 'B').sort((a, b) => b.score - a.score);
+            const categoryC = analyzedData.filter(c => c.category === 'C').sort((a, b) => b.score - a.score);
+            
+            // Separar por perfil para análise específica
+            const seniorPreparers = analyzedData.filter(c => 
+                c.profile === 'preparador' && c.experienceYears >= 15
+            ).sort((a, b) => b.experienceYears - a.experienceYears);
+            
+            const youngTalents = analyzedData.filter(c => 
+                c.age <= 30 && c.experienceYears >= 3
+            ).sort((a, b) => b.score - a.score);
+            
+            const versatileWorkers = analyzedData.filter(c => 
+                c.machineType === 'ambos' && c.experienceYears >= 8
+            ).sort((a, b) => b.experienceYears - a.experienceYears);
+
+            const topCandidatesHtml = `
+                <div class="top-candidates">
+                    <div class="top-header">
+                        <h2>🏆 Top Candidatos por Categoria</h2>
+                        <p>Sistema de pontuação baseado em experiência, perfil, versatilidade e formação</p>
+                    </div>
+                    
+                    <div class="category-tabs">
+                        <button class="tab-button active" data-tab="category-a">🥇 Categoria A (${categoryA.length})</button>
+                        <button class="tab-button" data-tab="category-b">🥈 Categoria B (${categoryB.length})</button>
+                        <button class="tab-button" data-tab="category-c">🥉 Categoria C (${categoryC.length})</button>
+                        <button class="tab-button" data-tab="senior-prep">🔧 Preparadores Seniores (${seniorPreparers.length})</button>
+                        <button class="tab-button" data-tab="young-talents">🌟 Jovens Talentos (${youngTalents.length})</button>
+                        <button class="tab-button" data-tab="versatile">🔧⚙️ Versáteis (${versatileWorkers.length})</button>
+                    </div>
+
+                    <div class="tab-content active" id="category-a">
+                        <h3>🥇 Categoria A - Candidatos Premium (Score 80+)</h3>
+                        <div class="candidates-list">
+                            ${categoryA.slice(0, 5).map((c, i) => `
+                                <div class="candidate-card premium">
+                                    <div class="candidate-header">
+                                        <span class="rank">#${i + 1}</span>
+                                        <span class="name">${c.name}</span>
+                                        <span class="score">Score: ${c.score}</span>
+                                    </div>
+                                    <div class="candidate-details">
+                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)}</span>
+                                        <span class="experience">${c.experienceYears} anos exp.</span>
+                                        <span class="age">${c.age} anos</span>
+                                        <span class="location">${c.city || 'N/I'}</span>
+                                    </div>
+                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
+                                    ${c.strengths.length > 0 ? `<div class="strengths">${c.strengths.join(', ')}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="category-b">
+                        <h3>🥈 Categoria B - Candidatos Sólidos (Score 65-79)</h3>
+                        <div class="candidates-list">
+                            ${categoryB.slice(0, 5).map((c, i) => `
+                                <div class="candidate-card solid">
+                                    <div class="candidate-header">
+                                        <span class="rank">#${i + 1}</span>
+                                        <span class="name">${c.name}</span>
+                                        <span class="score">Score: ${c.score}</span>
+                                    </div>
+                                    <div class="candidate-details">
+                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)}</span>
+                                        <span class="experience">${c.experienceYears} anos exp.</span>
+                                        <span class="age">${c.age} anos</span>
+                                        <span class="location">${c.city || 'N/I'}</span>
+                                    </div>
+                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
+                                    ${c.strengths.length > 0 ? `<div class="strengths">${c.strengths.join(', ')}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="category-c">
+                        <h3>🥉 Categoria C - Candidatos com Potencial (Score 50-64)</h3>
+                        <div class="candidates-list">
+                            ${categoryC.slice(0, 5).map((c, i) => `
+                                <div class="candidate-card potential">
+                                    <div class="candidate-header">
+                                        <span class="rank">#${i + 1}</span>
+                                        <span class="name">${c.name}</span>
+                                        <span class="score">Score: ${c.score}</span>
+                                    </div>
+                                    <div class="candidate-details">
+                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)}</span>
+                                        <span class="experience">${c.experienceYears} anos exp.</span>
+                                        <span class="age">${c.age} anos</span>
+                                        <span class="location">${c.city || 'N/I'}</span>
+                                    </div>
+                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
+                                    ${c.strengths.length > 0 ? `<div class="strengths">${c.strengths.join(', ')}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="senior-prep">
+                        <h3>🔧 Preparadores Seniores - Para Liderança Técnica</h3>
+                        <div class="candidates-list">
+                            ${seniorPreparers.slice(0, 5).map((c, i) => `
+                                <div class="candidate-card senior">
+                                    <div class="candidate-header">
+                                        <span class="rank">#${i + 1}</span>
+                                        <span class="name">${c.name}</span>
+                                        <span class="score">Score: ${c.score}</span>
+                                    </div>
+                                    <div class="candidate-details">
+                                        <span class="profile preparador">🔧 PREPARADOR SENIOR</span>
+                                        <span class="experience">${c.experienceYears} anos exp.</span>
+                                        <span class="age">${c.age} anos</span>
+                                        <span class="location">${c.city || 'N/I'}</span>
+                                    </div>
+                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
+                                    <div class="education">Formação: ${c.education}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="young-talents">
+                        <h3>🌟 Jovens Talentos - Para Renovação e Crescimento</h3>
+                        <div class="candidates-list">
+                            ${youngTalents.slice(0, 5).map((c, i) => `
+                                <div class="candidate-card young">
+                                    <div class="candidate-header">
+                                        <span class="rank">#${i + 1}</span>
+                                        <span class="name">${c.name}</span>
+                                        <span class="score">Score: ${c.score}</span>
+                                    </div>
+                                    <div class="candidate-details">
+                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)} JOVEM</span>
+                                        <span class="experience">${c.experienceYears} anos exp.</span>
+                                        <span class="age">${c.age} anos</span>
+                                        <span class="location">${c.city || 'N/I'}</span>
+                                    </div>
+                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
+                                    <div class="potential">💡 Alto potencial de crescimento</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="versatile">
+                        <h3>🔧⚙️ Profissionais Versáteis - Máxima Flexibilidade</h3>
+                        <div class="candidates-list">
+                            ${versatileWorkers.slice(0, 5).map((c, i) => `
+                                <div class="candidate-card versatile">
+                                    <div class="candidate-header">
+                                        <span class="rank">#${i + 1}</span>
+                                        <span class="name">${c.name}</span>
+                                        <span class="score">Score: ${c.score}</span>
+                                    </div>
+                                    <div class="candidate-details">
+                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)}</span>
+                                        <span class="experience">${c.experienceYears} anos exp.</span>
+                                        <span class="age">${c.age} anos</span>
+                                        <span class="location">${c.city || 'N/I'}</span>
+                                    </div>
+                                    <div class="candidate-machine">🔧⚙️ TORNO + CENTRO DE USINAGEM</div>
+                                    <div class="versatility">⭐ Máxima versatilidade operacional</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Inserir antes da tabela de candidatos
+            const dashboard = document.getElementById('dashboard');
+            const candidateTable = document.querySelector('.candidate-table');
+            dashboard.insertBefore(createElementFromHTML(topCandidatesHtml), candidateTable);
+            
+            // Adicionar funcionalidade das abas
+            setupTabFunctionality();
+        }
+
+        function getProfileLabel(profile) {
+            switch(profile) {
+                case 'preparador': return '🔧 Preparador';
+                case 'operador': return '⚙️ Operador';
+                case 'mixed': return '🔧⚙️ Multifuncional';
+                default: return '❓ Não especificado';
+            }
+        }
+
+        function createElementFromHTML(htmlString) {
+            const div = document.createElement('div');
+            div.innerHTML = htmlString.trim();
+            return div.firstChild;
+        }
+
+        function setupTabFunctionality() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    button.classList.add('active');
+                    const targetTab = button.getAttribute('data-tab');
+                    document.getElementById(targetTab).classList.add('active');
+                });
             });
         }
 
@@ -1019,14 +1665,25 @@
             const total = analyzedData.length;
             const preparadores = analyzedData.filter(c => c.profile === 'preparador').length;
             const operadores = analyzedData.filter(c => c.profile === 'operador').length;
+            const versateis = analyzedData.filter(c => c.machineType === 'ambos').length;
+            const categoryA = analyzedData.filter(c => c.category === 'A').length;
+            
             const avgAge = Math.round(analyzedData.reduce((sum, c) => sum + c.age, 0) / total);
             const avgExp = Math.round(analyzedData.reduce((sum, c) => sum + c.experienceYears, 0) / total);
+            
+            // Calcular concentração regional
+            const regionalCities = ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista'];
+            const regionalCount = analyzedData.filter(c => regionalCities.includes(c.city)).length;
+            const regionalPercentage = Math.round((regionalCount / total) * 100);
 
             document.getElementById('totalCandidates').textContent = total;
             document.getElementById('preparadorCount').textContent = preparadores;
             document.getElementById('operadorCount').textContent = operadores;
             document.getElementById('avgAge').textContent = avgAge || 0;
             document.getElementById('avgExperience').textContent = avgExp || 0;
+            document.getElementById('versatileCount').textContent = versateis;
+            document.getElementById('categoryACount').textContent = categoryA;
+            document.getElementById('regionalCount').textContent = `${regionalPercentage}%`;
         }
 
         function createCharts() {
@@ -1227,22 +1884,46 @@
         function createCandidateTable() {
             const table = document.getElementById('candidateTable');
             
-            // Ordenar candidatos por experiência
-            const sortedData = [...analyzedData].sort((a, b) => b.experienceYears - a.experienceYears);
+            // Ordenar candidatos por score (melhor metodologia)
+            const sortedData = [...analyzedData].sort((a, b) => b.score - a.score);
             
-            table.innerHTML = sortedData.map(candidate => `
-                <div class="candidate-row">
-                    <div class="candidate-name">${candidate.name || 'Nome não identificado'}</div>
-                    <div class="candidate-profile profile-${candidate.profile}">
-                        ${candidate.profile === 'preparador' ? 'Preparador' : 
-                          candidate.profile === 'operador' ? 'Operador' : 'Multifuncional'}
-                    </div>
-                    <div class="machine-type">${getMachineLabel(candidate.machineType)}</div>
-                    <div class="experience-years">${candidate.experienceYears} anos</div>
-                    <div>${candidate.age || '?'} anos</div>
-                    <div>${candidate.city || 'Não informado'}</div>
+            table.innerHTML = `
+                <div class="table-header-row">
+                    <div class="header-cell">Nome</div>
+                    <div class="header-cell">Categoria</div>
+                    <div class="header-cell">Score</div>
+                    <div class="header-cell">Perfil</div>
+                    <div class="header-cell">Máquina</div>
+                    <div class="header-cell">Experiência</div>
+                    <div class="header-cell">Idade</div>
+                    <div class="header-cell">Cidade</div>
                 </div>
-            `).join('');
+                ${sortedData.map((candidate, index) => `
+                    <div class="candidate-row ${candidate.category.toLowerCase()}">
+                        <div class="candidate-name">
+                            <span class="rank-badge">#${index + 1}</span>
+                            ${candidate.name || 'Nome não identificado'}
+                        </div>
+                        <div class="candidate-category category-${candidate.category.toLowerCase()}">
+                            ${candidate.category}
+                        </div>
+                        <div class="candidate-score">
+                            <span class="score-badge">${candidate.score}</span>
+                        </div>
+                        <div class="candidate-profile profile-${candidate.profile}">
+                            ${candidate.profile === 'preparador' ? '🔧 Preparador' : 
+                              candidate.profile === 'operador' ? '⚙️ Operador' : 
+                              candidate.profile === 'mixed' ? '🔧⚙️ Multifuncional' : '❓ N/E'}
+                        </div>
+                        <div class="machine-type">${getMachineLabel(candidate.machineType)}</div>
+                        <div class="experience-years">
+                            <strong>${candidate.experienceYears}</strong> anos
+                        </div>
+                        <div class="candidate-age">${candidate.age || '?'} anos</div>
+                        <div class="candidate-city">${candidate.city || 'Não informado'}</div>
+                    </div>
+                `).join('')}
+            `;
         }
 
         function getMachineLabel(type) {
