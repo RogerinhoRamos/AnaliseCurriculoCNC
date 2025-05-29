@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📊 Analisador de Currículos CNC</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfjs-dist/3.11.174/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
     <style>
@@ -806,6 +806,11 @@
                 <span class="feature">📋 PDFs Unificados</span>
                 <span class="feature">🤖 Análise Automática</span>
             </div>
+            <div style="margin-top: 15px;">
+                <button onclick="runDiagnostic()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; backdrop-filter: blur(10px);">
+                    🔧 Testar Sistema
+                </button>
+            </div>
         </div>
 
         <div class="upload-section">
@@ -818,7 +823,8 @@
             <div class="progress-bar" id="progressBar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
-            <button class="btn" id="analyzeBtn" onclick="startAnalysis()">🚀 Iniciar Análise</button>
+            <button class="btn" id="analyzeBtn" onclick="startAnalysis()" disabled>🚀 Iniciar Análise</button>
+            <button class="btn-debug" onclick="runDiagnostic()" style="margin-left: 10px; background: #95a5a6; color: white; border: none; padding: 10px 15px; border-radius: 5px; font-size: 0.9rem; cursor: pointer;">🔧 Diagnóstico</button>
         </div>
 
         <div class="dashboard" id="dashboard">
@@ -1015,28 +1021,104 @@
 
     <script>
         // Configuração do PDF.js
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdfjs-dist/3.11.174/pdf.worker.min.js';
+            console.log('✅ PDF.js configurado');
+        } else {
+            console.error('❌ PDF.js não carregado');
+        }
 
         // Variáveis globais
         let analyzedData = [];
         let charts = {};
 
+        // Teste de diagnóstico
+        function runDiagnostic() {
+            console.log('🔧 DIAGNÓSTICO COMPLETO DO SISTEMA:');
+            console.log('=====================================');
+            
+            // Testar bibliotecas
+            console.log('📚 BIBLIOTECAS:');
+            console.log('PDF.js disponível:', typeof pdfjsLib !== 'undefined' ? '✅' : '❌');
+            console.log('Chart.js disponível:', typeof Chart !== 'undefined' ? '✅' : '❌');
+            
+            if (typeof pdfjsLib !== 'undefined') {
+                console.log('PDF.js versão:', pdfjsLib.version || 'Desconhecida');
+                console.log('Worker configurado:', pdfjsLib.GlobalWorkerOptions.workerSrc ? '✅' : '❌');
+            }
+            
+            // Testar elementos DOM
+            console.log('\n🎯 ELEMENTOS DOM:');
+            const elementos = [
+                'uploadArea', 'fileInput', 'analyzeBtn', 'dashboard', 
+                'progressBar', 'progressFill'
+            ];
+            
+            let elementosOK = 0;
+            elementos.forEach(id => {
+                const elemento = document.getElementById(id);
+                const status = elemento ? '✅' : '❌';
+                console.log(`#${id}: ${status}`);
+                if (elemento) elementosOK++;
+            });
+            
+            console.log(`\n📊 RESUMO: ${elementosOK}/${elementos.length} elementos encontrados`);
+            
+            // Testar variáveis globais
+            console.log('\n🌐 VARIÁVEIS GLOBAIS:');
+            console.log('analyzedData:', Array.isArray(analyzedData) ? '✅ Array' : '❌');
+            console.log('selectedFiles:', window.selectedFiles ? `✅ ${window.selectedFiles.length} arquivo(s)` : '❌ Nenhum arquivo');
+            
+            console.log('\n=====================================');
+            
+            if (elementosOK === elementos.length && typeof pdfjsLib !== 'undefined') {
+                console.log('🎉 SISTEMA FUNCIONANDO CORRETAMENTE!');
+                alert('✅ Sistema funcionando corretamente!\n\nTodos os componentes foram carregados. Você pode fazer upload dos PDFs.');
+            } else {
+                console.log('⚠️ PROBLEMAS DETECTADOS!');
+                alert('⚠️ Problemas detectados!\n\nVerifique o console (F12) para mais detalhes.');
+            }
+        }
+
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            setupEventListeners();
+            console.log('🚀 DOM carregado, iniciando aplicação...');
+            
+            // Executar diagnóstico
+            setTimeout(() => {
+                runDiagnostic();
+                setupEventListeners();
+                console.log('✅ Aplicação completamente carregada e pronta para uso!');
+                
+                // Mostrar mensagem de pronto para o usuário
+                const uploadText = document.querySelector('.upload-text');
+                if (uploadText && !window.selectedFiles) {
+                    uploadText.innerHTML = '📄 Arraste seus PDFs aqui ou clique para selecionar<br><small style="opacity: 0.7;">Sistema carregado e pronto!</small>';
+                }
+            }, 500);
         });
 
         function setupEventListeners() {
             const uploadArea = document.getElementById('uploadArea');
             const fileInput = document.getElementById('fileInput');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+
+            if (!uploadArea || !fileInput || !analyzeBtn) {
+                console.error('❌ Elementos não encontrados');
+                return;
+            }
 
             // Upload area click
-            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('click', () => {
+                console.log('📁 Clique na área de upload');
+                fileInput.click();
+            });
 
             // Drag and drop
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 uploadArea.classList.add('dragover');
+                console.log('📂 Arquivo sendo arrastado...');
             });
 
             uploadArea.addEventListener('dragleave', () => {
@@ -1047,20 +1129,34 @@
                 e.preventDefault();
                 uploadArea.classList.remove('dragover');
                 const files = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
+                console.log(`📄 ${files.length} arquivo(s) PDF detectado(s)`);
                 if (files.length) {
-                    fileInput.files = e.dataTransfer.files;
-                    updateUploadUI(files);
+                    handleFiles(files);
                 }
             });
 
             // File input change
             fileInput.addEventListener('change', (e) => {
                 const files = Array.from(e.target.files);
-                updateUploadUI(files);
+                console.log(`📂 ${files.length} arquivo(s) selecionado(s)`);
+                handleFiles(files);
             });
 
-            // Setup multi-select filters
-            setupMultiSelectFilters();
+            // Analyze button
+            analyzeBtn.addEventListener('click', () => {
+                console.log('🔍 Botão analisar clicado');
+                startAnalysis();
+            });
+
+            console.log('✅ Event listeners configurados');
+        }
+
+        function handleFiles(files) {
+            console.log('📋 Processando arquivos:', files.map(f => f.name));
+            updateUploadUI(files);
+            
+            // Store files globally for analysis
+            window.selectedFiles = files;
         }
 
         function setupMultiSelectFilters() {
@@ -1253,29 +1349,62 @@
         }
 
         async function startAnalysis() {
-            const files = document.getElementById('fileInput').files;
-            if (files.length === 0) return;
+            console.log('🚀 Iniciando análise...');
+            
+            const files = window.selectedFiles || document.getElementById('fileInput').files;
+            
+            if (!files || files.length === 0) {
+                alert('⚠️ Por favor, selecione pelo menos um arquivo PDF primeiro.');
+                console.log('❌ Nenhum arquivo selecionado');
+                return;
+            }
 
-            showLoading();
+            console.log(`📊 Analisando ${files.length} arquivo(s)...`);
             
             try {
-                analyzedData = [];
+                showLoading();
+                analyzedData = []; // Reset data
+                
                 for (let i = 0; i < files.length; i++) {
+                    console.log(`📄 Processando arquivo ${i + 1}/${files.length}: ${files[i].name}`);
                     await processFile(files[i], i + 1, files.length);
+                }
+                
+                console.log(`✅ Processamento concluído. ${analyzedData.length} candidatos extraídos.`);
+                
+                if (analyzedData.length === 0) {
+                    alert('⚠️ Nenhum candidato foi encontrado nos arquivos. Verifique se os PDFs contêm currículos válidos.');
+                    hideLoading();
+                    return;
                 }
                 
                 generateDashboard();
                 showDashboard();
+                console.log('🎉 Dashboard gerado com sucesso!');
+                
             } catch (error) {
-                console.error('Erro na análise:', error);
-                alert('Erro ao processar os arquivos. Tente novamente.');
+                console.error('❌ Erro durante a análise:', error);
+                alert(`❌ Erro ao processar os arquivos: ${error.message}`);
+                hideLoading();
             }
         }
 
         function showLoading() {
+            console.log('⏳ Mostrando loading...');
             const progressBar = document.getElementById('progressBar');
-            progressBar.style.display = 'block';
-            document.getElementById('analyzeBtn').disabled = true;
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            
+            if (progressBar) progressBar.style.display = 'block';
+            if (analyzeBtn) analyzeBtn.disabled = true;
+        }
+
+        function hideLoading() {
+            console.log('✅ Ocultando loading...');
+            const progressBar = document.getElementById('progressBar');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            
+            if (progressBar) progressBar.style.display = 'none';
+            if (analyzeBtn) analyzeBtn.disabled = false;
         }
 
         function updateProgress(current, total) {
@@ -1284,27 +1413,61 @@
         }
 
         async function processFile(file, index, total) {
+            console.log(`🔄 Processando arquivo: ${file.name} (${file.size} bytes)`);
             updateProgress(index - 0.5, total);
 
             try {
+                // Verificar se é PDF
+                if (file.type !== 'application/pdf') {
+                    console.warn(`⚠️ Arquivo ${file.name} não é PDF. Tipo: ${file.type}`);
+                    return;
+                }
+
+                console.log('📖 Lendo arquivo PDF...');
                 const arrayBuffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                console.log(`✅ Arquivo lido: ${arrayBuffer.byteLength} bytes`);
+                
+                console.log('🔍 Carregando PDF com PDF.js...');
+                
+                // Configuração mais robusta do PDF.js
+                const loadingTask = pdfjsLib.getDocument({
+                    data: arrayBuffer,
+                    cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdfjs-dist/3.11.174/cmaps/',
+                    cMapPacked: true,
+                    standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdfjs-dist/3.11.174/standard_fonts/',
+                    verbosity: 0 // Reduzir logs do PDF.js
+                });
+                
+                const pdf = await loadingTask.promise;
+                
+                console.log(`📄 PDF carregado: ${pdf.numPages} páginas`);
                 
                 let fullText = '';
                 for (let i = 1; i <= pdf.numPages; i++) {
+                    console.log(`📃 Extraindo texto da página ${i}/${pdf.numPages}`);
                     const page = await pdf.getPage(i);
                     const textContent = await page.getTextContent();
                     const pageText = textContent.items.map(item => item.str).join(' ');
-                    fullText += pageText + ' ';
+                    fullText += pageText + '\n';
+                }
+
+                console.log(`✅ Texto extraído: ${fullText.length} caracteres`);
+                
+                if (fullText.length < 100) {
+                    console.warn(`⚠️ Texto muito curto extraído do arquivo ${file.name}`);
+                    return;
                 }
 
                 // Detectar se é PDF unificado ou individual
+                console.log('🔍 Analisando estrutura do PDF...');
                 const candidates = splitUnifiedPDF(fullText, file.name);
                 
                 if (candidates.length > 1) {
                     // PDF unificado - múltiplos candidatos
                     console.log(`📋 PDF unificado detectado: ${candidates.length} candidatos encontrados`);
                     console.log('📝 Candidatos identificados:', candidates.map(c => c.name || 'Nome não identificado'));
+                    
+                    let validCandidates = 0;
                     candidates.forEach(candidateData => {
                         // Validação adicional do candidato
                         if (candidateData.name && 
@@ -1312,21 +1475,30 @@
                             !isInvalidCandidateName(candidateData.name) &&
                             (candidateData.age > 0 || candidateData.experienceYears > 0 || candidateData.city)) {
                             analyzedData.push(candidateData);
+                            validCandidates++;
+                            console.log(`✅ Candidato válido: ${candidateData.name}`);
                         } else {
                             console.log(`❌ Candidato inválido descartado: ${candidateData.name || 'sem nome'}`);
                         }
                     });
+                    
+                    console.log(`📊 ${validCandidates} candidatos válidos adicionados`);
                 } else {
                     // PDF individual - um candidato
                     console.log(`📄 PDF individual processado`);
                     const candidateData = extractCandidateInfo(fullText, file.name);
+                    
                     if (candidateData.name && !isInvalidCandidateName(candidateData.name)) {
                         analyzedData.push(candidateData);
+                        console.log(`✅ Candidato individual válido: ${candidateData.name}`);
+                    } else {
+                        console.log(`❌ Candidato individual inválido: ${candidateData.name || 'sem nome'}`);
                     }
                 }
 
             } catch (error) {
-                console.error(`Erro ao processar ${file.name}:`, error);
+                console.error(`❌ Erro ao processar ${file.name}:`, error);
+                alert(`Erro ao processar o arquivo ${file.name}: ${error.message}`);
             }
 
             updateProgress(index, total);
@@ -1821,18 +1993,44 @@
         }
 
         function generateDashboard() {
+            console.log('🔧 Gerando dashboard...');
+            
             // Remover candidatos duplicados baseado no nome normalizado
+            const originalCount = analyzedData.length;
             analyzedData = removeDuplicates(analyzedData);
+            console.log(`🔍 Duplicatas removidas: ${originalCount} → ${analyzedData.length} candidatos únicos`);
             
-            updateStats();
-            createCharts();
-            createCandidateTable();
-            createStrategicInsights();
-            createTopCandidates();
-            createHiringStrategy();
-            populateFilters();
+            try {
+                updateStats();
+                console.log('✅ Estatísticas atualizadas');
+                
+                createCharts();
+                console.log('✅ Gráficos criados');
+                
+                createCandidateTable();
+                console.log('✅ Tabela de candidatos criada');
+                
+                createStrategicInsights();
+                console.log('✅ Insights estratégicos criados');
+                
+                createTopCandidates();
+                console.log('✅ Top candidatos criados');
+                
+                createHiringStrategy();
+                console.log('✅ Estratégia de contratação criada');
+                
+                populateFilters();
+                console.log('✅ Filtros populados');
+                
+                setupMultiSelectFilters();
+                console.log('✅ Filtros multi-seleção configurados');
+                
+            } catch (error) {
+                console.error('❌ Erro ao gerar dashboard:', error);
+                throw error;
+            }
             
-            console.log(`✅ Análise concluída: ${analyzedData.length} candidatos únicos processados`);
+            console.log(`✅ Dashboard gerado com sucesso: ${analyzedData.length} candidatos processados`);
         }
 
         function createHiringStrategy() {
