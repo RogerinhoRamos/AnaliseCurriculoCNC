@@ -1783,18 +1783,18 @@
             bestSplit.forEach((section, index) => {
                 if (section.trim().length > 50) {
                     const candidateData = extractCandidateInfo(section, `${filename}_candidato_${index + 1}`);
-                    
+            
                     if (candidateData.name && 
-                            candidateData.name.length > 3 && 
-                            !isInvalidCandidateName(candidateData.name)) {
-                            candidates.push(candidateData);
-                            debugLog(`Candidato válido: ${candidateData.name}`);
-                        } else {
-                            debugLog(`❌ Seção descartada: ${candidateData.name || 'sem nome'}`);
-                        }
-
+                        candidateData.name.length > 3 &&
+                        !isInvalidCandidateName(candidateData.name)) {
+                        candidates.push(candidateData);
+                        debugLog(`✅ Candidato válido: ${candidateData.name}`);
+                    } else {
+                        debugLog(`❌ Seção descartada: ${candidateData.name || 'sem nome'}`);
+                    }
                 }
             });
+
 
             return candidates;
         }
