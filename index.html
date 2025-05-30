@@ -2966,6 +2966,32 @@ updateProgress(index, total);
                 }
             }, 5000);
         }
+
+
+
+
+            
+  document.addEventListener('DOMContentLoaded', () => {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+
+    if (uploadArea && fileInput) {
+      uploadArea.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', () => {
+        console.log(`Arquivos selecionados: ${fileInput.files.length}`);
+        handleFiles(fileInput.files);
+      });
+    } else {
+      console.error("⚠️ Elementos de upload não encontrados.");
+    }
+  });
+
+
+
+            
     </script>
 </body>
 </html>
