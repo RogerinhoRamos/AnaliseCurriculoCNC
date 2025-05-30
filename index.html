@@ -1785,13 +1785,14 @@
                     const candidateData = extractCandidateInfo(section, `${filename}_candidato_${index + 1}`);
                     
                     if (candidateData.name && 
-                        candidateData.name.length > 3 && 
-                        !candidateData.name.toLowerCase().includes('experiência') &&
-                        !candidateData.name.toLowerCase().includes('brasileiro') &&
-                        !candidateData.name.toLowerCase().includes('cursos')) {
-                        candidates.push(candidateData);
-                        debugLog(`Candidato válido: ${candidateData.name}`);
-                    }
+                            candidateData.name.length > 3 && 
+                            !isInvalidCandidateName(candidateData.name)) {
+                            candidates.push(candidateData);
+                            debugLog(`Candidato válido: ${candidateData.name}`);
+                        } else {
+                            debugLog(`❌ Seção descartada: ${candidateData.name || 'sem nome'}`);
+                        }
+
                 }
             });
 
