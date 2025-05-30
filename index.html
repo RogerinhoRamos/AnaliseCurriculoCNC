@@ -1743,10 +1743,7 @@ updateProgress(index, total);
             let bestSplit = [fullText];
 
             for (let separator of candidateSeparators) {
-                const splits = fullText.split(separator).filter(section => {
-                return section.trim().length > 100;
-            });
-
+                const splits = fullText.split(separator).filter(section => section.trim().length > 100);
                 
                 if (splits.length > bestSplit.length) {
                     bestSplit = splits;
