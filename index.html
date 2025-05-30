@@ -1692,16 +1692,14 @@
                 if (candidates.length > 1) {
                     debugLog(`PDF unificado detectado: ${candidates.length} candidatos`);
                     candidates.forEach(candidateData => {
-                        if (
-                            candidateData.name &&
-                            candidateData.name.length > 2 &&
-                            !isInvalidCandidateName(candidateData.name)
-                        ) {
+                        if (candidateData.name && 
+                            candidateData.name.length > 2 && 
+                            !isInvalidCandidateName(candidateData.name) &&
+                            (candidateData.age > 0 || candidateData.experienceYears > 0 || candidateData.city)) {
                             analyzedData.push(candidateData);
                             debugLog(`Candidato adicionado: ${candidateData.name}`);
                         }
                     });
-                }
                 } else {
                     debugLog('PDF individual processado');
                     const candidateData = extractCandidateInfo(fullText, file.name);
@@ -1785,18 +1783,17 @@
             bestSplit.forEach((section, index) => {
                 if (section.trim().length > 50) {
                     const candidateData = extractCandidateInfo(section, `${filename}_candidato_${index + 1}`);
-            
+                    
                     if (candidateData.name && 
-                        candidateData.name.length > 3 &&
-                        !isInvalidCandidateName(candidateData.name)) {
+                        candidateData.name.length > 3 && 
+                        !candidateData.name.toLowerCase().includes('experiência') &&
+                        !candidateData.name.toLowerCase().includes('brasileiro') &&
+                        !candidateData.name.toLowerCase().includes('cursos')) {
                         candidates.push(candidateData);
-                        debugLog(`✅ Candidato válido: ${candidateData.name}`);
-                    } else {
-                        debugLog(`❌ Seção descartada: ${candidateData.name || 'sem nome'}`);
+                        debugLog(`Candidato válido: ${candidateData.name}`);
                     }
                 }
             });
-
 
             return candidates;
         }
