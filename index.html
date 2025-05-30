@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📊 Analisador de Currículos CNC</title>
+    <title>🔧 Analisador de Currículos CNC - Versão Melhorada</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -46,23 +46,6 @@
             font-size: 1.1rem;
             opacity: 0.9;
             margin-bottom: 20px;
-        }
-
-        .header-features {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .feature {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .upload-section {
@@ -158,146 +141,59 @@
             transition: width 0.3s ease;
         }
 
-        .dashboard {
+        .loading {
+            text-align: center;
             padding: 40px;
+            color: #7f8c8d;
             display: none;
         }
 
-        .dashboard.active {
-            display: block;
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #ecf0f1;
+            border-left: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
 
-        .filters {
+        .debug-section {
             background: #f8f9fa;
             padding: 20px;
-            margin-bottom: 30px;
+            margin: 20px;
             border-radius: 10px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .filter-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .multi-select {
-            position: relative;
-            min-width: 200px;
-        }
-
-        .select-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: white;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .select-display:hover {
-            border-color: #3498db;
-        }
-
-        .dropdown-arrow {
-            color: #7f8c8d;
-            transition: transform 0.3s ease;
-        }
-
-        .multi-select.open .dropdown-arrow {
-            transform: rotate(180deg);
-        }
-
-        .select-options {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-top: none;
-            border-radius: 0 0 5px 5px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 1000;
-            max-height: 200px;
-            overflow-y: auto;
+            border-left: 4px solid #3498db;
             display: none;
         }
 
-        .multi-select.open .select-options {
-            display: block;
-        }
-
-        .option-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s ease;
-        }
-
-        .option-item:hover {
-            background: #f8f9fa;
-        }
-
-        .option-item input[type="checkbox"] {
-            margin-right: 8px;
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .btn-filter, .btn-reset {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-filter {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-        }
-
-        .btn-filter:hover {
-            background: linear-gradient(135deg, #2980b9, #3498db);
-            transform: translateY(-1px);
-        }
-
-        .btn-reset {
-            background: #ecf0f1;
+        .debug-title {
+            font-weight: bold;
             color: #2c3e50;
+            margin-bottom: 10px;
         }
 
-        .btn-reset:hover {
-            background: #d5dbdb;
-            transform: translateY(-1px);
+        .debug-content {
+            font-family: monospace;
+            font-size: 0.9rem;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .result-section {
+            display: none;
+            padding: 40px;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .stat-card {
@@ -328,678 +224,10 @@
             margin-top: 5px;
         }
 
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .chart-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .chart-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .strategic-insights {
-            margin-bottom: 40px;
-        }
-
-        .insights-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .insights-header h2 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .insights-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-        }
-
-        .insight-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .insight-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .insight-card.strengths {
-            border-left: 4px solid #27ae60;
-        }
-
-        .insight-card.attention {
-            border-left: 4px solid #f39c12;
-        }
-
-        .insight-card.recommendations {
-            border-left: 4px solid #3498db;
-        }
-
-        .insight-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .insight-card li {
-            padding: 8px 0;
-            border-bottom: 1px solid #ecf0f1;
-            color: #2c3e50;
-        }
-
-        .insight-card li:last-child {
-            border-bottom: none;
-        }
-
-        .top-candidates {
-            margin-bottom: 40px;
-        }
-
-        .top-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .top-header h2 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .category-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .tab-button {
-            padding: 10px 20px;
-            border: 2px solid #ecf0f1;
-            background: white;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .tab-button.active {
-            background: #3498db;
-            color: white;
-            border-color: #3498db;
-        }
-
-        .tab-button:hover:not(.active) {
-            border-color: #3498db;
-            color: #3498db;
-        }
-
-        .tab-content {
-            display: none;
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .tab-content h3 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-        }
-
-        .candidates-list {
-            display: grid;
-            gap: 15px;
-        }
-
-        .candidate-card {
-            border: 2px solid #ecf0f1;
-            border-radius: 10px;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .candidate-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .candidate-card.premium {
-            border-color: #f1c40f;
-            background: linear-gradient(90deg, #fff9e6, transparent);
-        }
-
-        .candidate-card.solid {
-            border-color: #95a5a6;
-            background: linear-gradient(90deg, #f8f9fa, transparent);
-        }
-
-        .candidate-card.potential {
-            border-color: #e67e22;
-            background: linear-gradient(90deg, #fef5f0, transparent);
-        }
-
-        .candidate-card.senior {
-            border-color: #8e44ad;
-            background: linear-gradient(90deg, #f8f5ff, transparent);
-        }
-
-        .candidate-card.young {
-            border-color: #27ae60;
-            background: linear-gradient(90deg, #f0fff4, transparent);
-        }
-
-        .candidate-card.versatile {
-            border-color: #2c3e50;
-            background: linear-gradient(90deg, #f8f9fa, transparent);
-        }
-
-        .candidate-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .candidate-header .rank {
-            background: #3498db;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        .candidate-header .name {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 1.1rem;
-        }
-
-        .candidate-header .score {
-            background: #ecf0f1;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 0.9rem;
-        }
-
-        .candidate-details {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-
-        .candidate-details span {
-            background: #f8f9fa;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            color: #2c3e50;
-        }
-
-        .candidate-details .profile.preparador {
-            background: #d5f4e6;
-            color: #27ae60;
-        }
-
-        .candidate-details .profile.operador {
-            background: #e3f2fd;
-            color: #2196f3;
-        }
-
-        .candidate-details .profile.mixed {
-            background: #fff3e0;
-            color: #ff9800;
-        }
-
-        .candidate-machine {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-bottom: 8px;
-        }
-
-        .strengths {
-            font-size: 0.8rem;
-            color: #27ae60;
-            font-style: italic;
-        }
-
-        .education {
-            font-size: 0.8rem;
-            color: #8e44ad;
-            font-weight: 500;
-        }
-
-        .potential {
-            font-size: 0.8rem;
-            color: #27ae60;
-            font-weight: 500;
-        }
-
-        .versatility {
-            font-size: 0.8rem;
-            color: #2c3e50;
-            font-weight: 500;
-        }
-
-        .hiring-strategy {
-            margin-bottom: 40px;
-        }
-
-        .strategy-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .strategy-header h2 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .strategy-phases {
-            display: grid;
-            gap: 25px;
-        }
-
-        .phase-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .phase-card.priority {
-            border-left: 4px solid #e74c3c;
-        }
-
-        .phase-card.expansion {
-            border-left: 4px solid #f39c12;
-        }
-
-        .phase-card.development {
-            border-left: 4px solid #27ae60;
-        }
-
-        .phase-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .phase-header h3 {
-            color: #2c3e50;
-            font-size: 1.3rem;
-        }
-
-        .phase-timeline {
-            background: #ecf0f1;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .recommendations {
-            display: grid;
-            gap: 15px;
-        }
-
-        .recommendation {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border-left: 3px solid #3498db;
-        }
-
-        .recommendation strong {
-            color: #2c3e50;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .reason {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            font-style: italic;
-        }
-
-        .conclusion {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            margin-top: 25px;
-        }
-
-        .conclusion h3 {
-            color: #2c3e50;
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-        }
-
-        .conclusion-points {
-            display: grid;
-            gap: 15px;
-        }
-
-        .conclusion-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .conclusion-item.excellent {
-            background: #d5f4e6;
-            border-left: 4px solid #27ae60;
-        }
-
-        .conclusion-item.good {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-        }
-
-        .conclusion-item.strategic {
-            background: #fff3e0;
-            border-left: 4px solid #ff9800;
-        }
-
-        .conclusion-item.recommendation {
-            background: #fdf2f2;
-            border-left: 4px solid #e74c3c;
-        }
-
-        .conclusion-item .icon {
-            font-size: 1.5rem;
-        }
-
-        .conclusion-item strong {
-            color: #2c3e50;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .candidate-table {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .table-header {
-            background: #34495e;
-            color: white;
-            padding: 20px;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .ranking-info {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .category-legend {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-        }
-
-        .legend-color.a {
-            background: #f1c40f;
-        }
-
-        .legend-color.b {
-            background: #95a5a6;
-        }
-
-        .legend-color.c {
-            background: #e67e22;
-        }
-
-        .legend-color.d {
-            background: #e74c3c;
-        }
-
-        .table-content {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .table-header-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr 1fr 1fr 1.5fr;
-            gap: 15px;
-            padding: 15px 20px;
-            background: #2c3e50;
-            color: white;
-            font-weight: 600;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .header-cell {
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
-        .candidate-row {
-            padding: 15px 20px;
-            border-bottom: 1px solid #ecf0f1;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr 1fr 1fr 1.5fr;
-            gap: 15px;
-            align-items: center;
-            transition: all 0.2s ease;
-        }
-
-        .candidate-row:hover {
-            background: #f8f9fa;
-            transform: translateX(5px);
-        }
-
-        .candidate-row.a {
-            border-left: 4px solid #f1c40f;
-            background: linear-gradient(90deg, #fff9e6, transparent);
-        }
-
-        .candidate-row.b {
-            border-left: 4px solid #95a5a6;
-            background: linear-gradient(90deg, #f8f9fa, transparent);
-        }
-
-        .candidate-row.c {
-            border-left: 4px solid #e67e22;
-            background: linear-gradient(90deg, #fef5f0, transparent);
-        }
-
-        .candidate-row.d {
-            border-left: 4px solid #e74c3c;
-            background: linear-gradient(90deg, #fdf2f2, transparent);
-        }
-
-        .candidate-name {
-            font-weight: 600;
-            color: #2c3e50;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .name-details {
-            flex-grow: 1;
-        }
-
-        .main-name {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 2px;
-        }
-
-        .extra-info {
-            font-size: 0.8rem;
-            color: #7f8c8d;
-            font-style: italic;
-            margin-bottom: 2px;
-        }
-
-        .candidate-id {
-            font-size: 0.75rem;
-            color: #95a5a6;
-            font-weight: normal;
-        }
-
-        .city-name {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .full-address {
-            font-size: 0.8rem;
-            color: #7f8c8d;
-            margin-top: 2px;
-        }
-
-        .rank-badge {
-            background: #3498db;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .candidate-category {
-            text-align: center;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
-
-        .category-a {
-            background: #f1c40f;
-            color: white;
-        }
-
-        .category-b {
-            background: #95a5a6;
-            color: white;
-        }
-
-        .category-c {
-            background: #e67e22;
-            color: white;
-        }
-
-        .category-d {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .candidate-score {
-            text-align: center;
-        }
-
-        .score-badge {
-            background: #ecf0f1;
-            padding: 8px 12px;
-            border-radius: 15px;
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 0.9rem;
-        }
-
-        .candidate-age, .candidate-city {
-            text-align: center;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-
-        .experience-years {
-            text-align: center;
-            color: #8e44ad;
-            font-weight: 600;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #ecf0f1;
-            border-left: 4px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
         .footer {
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
             padding: 25px 40px;
-            margin-top: 0;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
             text-align: center;
         }
 
@@ -1007,16 +235,6 @@
             font-size: 0.9rem;
             opacity: 0.9;
             margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .year {
-            font-weight: 600;
-            color: #3498db;
         }
 
         .developer {
@@ -1028,49 +246,24 @@
             font-weight: 700;
         }
 
-        .separator {
-            color: #7f8c8d;
-            font-weight: 300;
-        }
-
-        .tech {
-            color: #95a5a6;
-            font-size: 0.8rem;
-            font-style: italic;
-        }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        /* Debug styles */
-        .debug-info {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
-            font-family: monospace;
-            font-size: 0.8rem;
-            max-height: 150px;
-            overflow-y: auto;
-            display: none;
-        }
-
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
         }
 
         .success-message {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
             border-radius: 5px;
             padding: 15px;
             margin: 20px 0;
@@ -1089,130 +282,9 @@
             .header h1 {
                 font-size: 2rem;
             }
-
-            .header-features {
-                gap: 10px;
-            }
-
-            .feature {
-                font-size: 0.8rem;
-                padding: 6px 12px;
-            }
             
             .upload-section {
                 padding: 20px;
-            }
-            
-            .dashboard {
-                padding: 20px;
-            }
-            
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .insights-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .category-tabs {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .tab-button {
-                text-align: center;
-                margin-bottom: 5px;
-            }
-
-            .table-header-row,
-            .candidate-row {
-                grid-template-columns: 1fr;
-                gap: 10px;
-                text-align: center;
-                padding: 15px;
-            }
-
-            .table-header-row {
-                display: none;
-            }
-
-            .candidate-row {
-                display: block;
-                border: 1px solid #ecf0f1;
-                border-radius: 10px;
-                margin-bottom: 10px;
-                padding: 15px;
-            }
-
-            .candidate-name {
-                justify-content: center;
-                margin-bottom: 10px;
-                font-size: 1.1rem;
-            }
-
-            .candidate-row > div {
-                margin-bottom: 8px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .phase-header {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .phase-header h3 {
-                font-size: 1.1rem;
-            }
-
-            .conclusion-points {
-                gap: 10px;
-            }
-
-            .conclusion-item {
-                flex-direction: column;
-                text-align: center;
-                gap: 10px;
-            }
-
-            .filters {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .filter-group {
-                width: 100%;
-            }
-
-            .multi-select {
-                min-width: 100%;
-            }
-
-            .filter-actions {
-                justify-content: center;
-                width: 100%;
-            }
-
-            .btn-filter, .btn-reset {
-                flex: 1;
-                max-width: 150px;
-            }
-
-            .footer {
-                padding: 20px;
-            }
-
-            .copyright {
-                flex-direction: column;
-                gap: 5px;
-                font-size: 0.8rem;
-            }
-
-            .separator {
-                display: none;
             }
         }
     </style>
@@ -1221,12 +293,7 @@
     <div class="container">
         <div class="header">
             <h1>🔧 Analisador de Currículos CNC</h1>
-            <p>Análise Dinâmica para Preparadores e Operadores CNC</p>
-            <div class="header-features">
-                <span class="feature">📄 PDFs Individuais</span>
-                <span class="feature">📋 PDFs Unificados</span>
-                <span class="feature">🤖 Análise Automática</span>
-            </div>
+            <p>Sistema Melhorado - Extração Precisa para Preparadores e Operadores CNC</p>
         </div>
 
         <div class="upload-section">
@@ -1234,118 +301,28 @@
                 <div class="upload-icon">📄</div>
                 <div class="upload-text">Clique ou arraste seus PDFs aqui</div>
                 <div class="upload-subtext">Suporte para PDFs individuais ou unificados com múltiplos candidatos</div>
-                
             </div>
             
-                <input type="file" id="fileInput" multiple accept=".pdf" style="display:none;">
+            <input type="file" id="fileInput" multiple accept=".pdf" style="display:none;">
             
             <div class="progress-bar" id="progressBar">
                 <div class="progress-fill" id="progressFill"></div>
-
-                
             </div>
-            <button class="btn" id="analyzeBtn" onclick="startAnalysis()">🚀 Iniciar Análise</button>
-            <div id="debugOutput" class="debug-info"></div>
+            
+            <button class="btn" id="analyzeBtn" onclick="startAnalysis()">🚀 Iniciar Análise Melhorada</button>
         </div>
 
-        <div class="dashboard" id="dashboard">
-            <div class="filters" id="filters">
-                <div class="filter-group">
-                    <label class="filter-label">Perfil:</label>
-                    <div class="multi-select" id="profileFilter">
-                        <div class="select-display">
-                            <span class="selected-text">Todos os perfis</span>
-                            <span class="dropdown-arrow">▼</span>
-                        </div>
-                        <div class="select-options">
-                            <label class="option-item">
-                                <input type="checkbox" value="" checked> Todos
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="preparador"> 🔧 Preparadores
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="operador"> ⚙️ Operadores
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="mixed"> 🔧⚙️ Multifuncionais
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">Máquina:</label>
-                    <div class="multi-select" id="machineFilter">
-                        <div class="select-display">
-                            <span class="selected-text">Todas as máquinas</span>
-                            <span class="dropdown-arrow">▼</span>
-                        </div>
-                        <div class="select-options">
-                            <label class="option-item">
-                                <input type="checkbox" value="" checked> Todas
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="torno"> 🔧 Torno CNC
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="centro"> ⚙️ Centro de Usinagem
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="ambos"> 🔧⚙️ Ambos
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">Cidade:</label>
-                    <div class="multi-select" id="cityFilter">
-                        <div class="select-display">
-                            <span class="selected-text">Todas as cidades</span>
-                            <span class="dropdown-arrow">▼</span>
-                        </div>
-                        <div class="select-options">
-                            <label class="option-item">
-                                <input type="checkbox" value="" checked> Todas
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="filter-group">
-                    <label class="filter-label">Categoria:</label>
-                    <div class="multi-select" id="categoryFilter">
-                        <div class="select-display">
-                            <span class="selected-text">Todas as categorias</span>
-                            <span class="dropdown-arrow">▼</span>
-                        </div>
-                        <div class="select-options">
-                            <label class="option-item">
-                                <input type="checkbox" value="" checked> Todas
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="A"> 🥇 Categoria A (Premium)
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="B"> 🥈 Categoria B (Sólido)
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="C"> 🥉 Categoria C (Potencial)
-                            </label>
-                            <label class="option-item">
-                                <input type="checkbox" value="D"> 📋 Categoria D (Básico)
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="filter-actions">
-                    <button class="btn-filter" onclick="applyFilters()">🔍 Filtrar</button>
-                    <button class="btn-reset" onclick="resetFilters()">🔄 Limpar</button>
-                </div>
-            </div>
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Analisando currículos com precisão melhorada...</p>
+        </div>
 
+        <div class="debug-section" id="debugSection">
+            <div class="debug-title">🔍 Debug da Extração:</div>
+            <div class="debug-content" id="debugContent"></div>
+        </div>
+
+        <div class="result-section" id="resultSection">
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number" id="totalCandidates">0</span>
@@ -1368,224 +345,70 @@
                     <div class="stat-label">Anos Experiência Média</div>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-number" id="versatileCount">0</span>
-                    <div class="stat-label">Profissionais Versáteis</div>
-                </div>
-                <div class="stat-card">
                     <span class="stat-number" id="categoryACount">0</span>
                     <div class="stat-label">Categoria A (Premium)</div>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" id="regionalCount">0%</span>
-                    <div class="stat-label">Concentração Regional</div>
+                    <div class="stat-label">Região Próxima (inc. Itupeva)</div>
                 </div>
             </div>
 
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <div class="chart-title">📊 Distribuição por Perfil</div>
-                    <canvas id="profileChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-title">🏭 Tipo de Máquina</div>
-                    <canvas id="machineChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-title">👥 Distribuição por Idade</div>
-                    <canvas id="ageChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-title">🎓 Nível de Escolaridade</div>
-                    <canvas id="educationChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-title">📍 Distribuição Geográfica</div>
-                    <canvas id="locationChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-title">⏱️ Experiência por Anos</div>
-                    <canvas id="experienceChart"></canvas>
-                </div>
-            </div>
-
-            <div class="candidate-table">
-                <div class="table-header">
-                    👨‍💼 Ranking de Candidatos por Score
-                    <div class="ranking-info">
-                        <span class="category-legend">
-                            <span class="legend-item"><span class="legend-color a"></span>A: Premium (80+)</span>
-                            <span class="legend-item"><span class="legend-color b"></span>B: Sólido (65-79)</span>
-                            <span class="legend-item"><span class="legend-color c"></span>C: Potencial (50-64)</span>
-                            <span class="legend-item"><span class="legend-color d"></span>D: Básico (&lt;50)</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="table-content" id="candidateTable">
-                    <!-- Tabela será preenchida dinamicamente -->
-                </div>
-            </div>
+            <button class="btn" onclick="generateFinalReport()">📊 Gerar Relatório Final</button>
         </div>
 
-        <!-- Footer com Copyright -->
-        <footer class="footer">
-            <div class="footer-content">
-                <p class="copyright">
-                    <span class="year">© 2025</span>
-                    <span class="separator">•</span>
-                    <span class="developer">Desenvolvido por <strong>Rogerinho Ramos</strong></span>
-                    <span class="separator">•</span>
-                    <span class="tech">Analytics Tool & JavaScript</span>
-                </p>
-            </div>
-        </footer>
+        <div class="footer">
+            <p class="copyright">
+                <span class="developer">© 2025 • Desenvolvido por <strong>Rogerinho Ramos</strong> • Versão Melhorada</span>
+            </p>
+        </div>
     </div>
 
     <script>
-        // Configuração do PDF.js com tratamento de erro melhorado
-        try {
-            if (typeof pdfjsLib !== 'undefined') {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-                console.log('✅ PDF.js configurado com sucesso');
-            } else {
-                console.error('❌ PDF.js não carregou. Verifique a conexão com a internet.');
-                showMessage('Erro: PDF.js não carregou. Verifique sua conexão com a internet.', 'error');
-            }
-        } catch (error) {
-            console.error('❌ Erro ao configurar PDF.js:', error);
-            showMessage('Erro ao configurar PDF.js: ' + error.message, 'error');
+        // Configuração do PDF.js
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            console.log('✅ PDF.js configurado com sucesso');
         }
 
         // Variáveis globais
         let analyzedData = [];
-        let charts = {};
         let debugMode = true;
-
-        // Função de log de debug
-        function debugLog(message, data = null) {
-            if (debugMode) {
-                const timestamp = new Date().toLocaleTimeString();
-                console.log(`🔍 ${timestamp}: ${message}`, data || '');
-                
-                const debugOutput = document.getElementById('debugOutput');
-                if (debugOutput) {
-                    debugOutput.style.display = 'block';
-                    debugOutput.innerHTML += `<div>${timestamp}: ${message}</div>`;
-                    debugOutput.scrollTop = debugOutput.scrollHeight;
-                }
-            }
-        }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            debugLog('DOM carregado, configurando sistema...');
             setupEventListeners();
         });
 
         function setupEventListeners() {
-            try {
-                const uploadArea = document.getElementById('uploadArea');
-                const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
 
-                if (!uploadArea || !fileInput) {
-                    throw new Error('Elementos principais não encontrados');
-                }
+            uploadArea.addEventListener('click', () => fileInput.click());
 
-                // Upload area click
-                uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
 
-                // Drag and drop
-                uploadArea.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    uploadArea.classList.add('dragover');
-                });
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
 
-                uploadArea.addEventListener('dragleave', () => {
-                    uploadArea.classList.remove('dragover');
-                });
-
-                uploadArea.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    uploadArea.classList.remove('dragover');
-                    const files = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
-                    debugLog(`Arquivos soltos: ${files.length} PDFs`);
-                    if (files.length) {
-                        fileInput.files = e.dataTransfer.files;
-                        updateUploadUI(files);
-                    }
-                });
-
-                // File input change
-                fileInput.addEventListener('change', (e) => {
-                    const files = Array.from(e.target.files);
-                    debugLog(`Arquivos selecionados: ${files.length}`);
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
+                if (files.length) {
+                    fileInput.files = e.dataTransfer.files;
                     updateUploadUI(files);
-                });
-
-                // Setup multi-select filters
-                setupMultiSelectFilters();
-
-                debugLog('Event listeners configurados com sucesso');
-            } catch (error) {
-                debugLog('Erro ao configurar event listeners: ' + error.message);
-                showMessage('Erro ao configurar interface: ' + error.message, 'error');
-            }
-        }
-
-        function setupMultiSelectFilters() {
-            const multiSelects = document.querySelectorAll('.multi-select');
-            
-            multiSelects.forEach(select => {
-                const display = select.querySelector('.select-display');
-                const options = select.querySelector('.select-options');
-                
-                display.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    document.querySelectorAll('.multi-select.open').forEach(s => {
-                        if (s !== select) s.classList.remove('open');
-                    });
-                    select.classList.toggle('open');
-                });
-                
-                options.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                });
-                
-                const checkboxes = options.querySelectorAll('input[type="checkbox"]');
-                checkboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', () => {
-                        updateSelectDisplay(select);
-                    });
-                });
-            });
-            
-            document.addEventListener('click', () => {
-                document.querySelectorAll('.multi-select.open').forEach(select => {
-                    select.classList.remove('open');
-                });
-            });
-        }
-
-        function updateSelectDisplay(selectElement) {
-            const display = selectElement.querySelector('.selected-text');
-            const checkboxes = selectElement.querySelectorAll('input[type="checkbox"]:not([value=""])');
-            const selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-            
-            if (selectedCount === 0) {
-                const allCheckbox = selectElement.querySelector('input[value=""]');
-                allCheckbox.checked = true;
-                display.textContent = display.textContent.replace(/\d+ selecionado[s]?/, 'Todos');
-            } else {
-                const allCheckbox = selectElement.querySelector('input[value=""]');
-                allCheckbox.checked = false;
-                
-                if (selectedCount === 1) {
-                    const selectedCheckbox = Array.from(checkboxes).find(cb => cb.checked);
-                    const label = selectedCheckbox.closest('.option-item').textContent.trim();
-                    display.textContent = label;
-                } else {
-                    display.textContent = `${selectedCount} selecionado${selectedCount > 1 ? 's' : ''}`;
                 }
-            }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                updateUploadUI(files);
+            });
         }
 
         function updateUploadUI(files) {
@@ -1593,11 +416,7 @@
             const analyzeBtn = document.getElementById('analyzeBtn');
             
             if (files.length > 0) {
-                if (files.length === 1) {
-                    uploadText.textContent = `📄 ${files.length} arquivo selecionado (individual ou unificado)`;
-                } else {
-                    uploadText.textContent = `📄 ${files.length} arquivos selecionados (múltiplos PDFs)`;
-                }
+                uploadText.textContent = `📄 ${files.length} arquivo(s) selecionado(s)`;
                 analyzeBtn.disabled = false;
             } else {
                 uploadText.textContent = 'Clique ou arraste seus PDFs aqui';
@@ -1612,28 +431,28 @@
                 return;
             }
 
-            debugLog(`Iniciando análise de ${files.length} arquivo(s)`);
             showLoading();
+            debugLog('🚀 Iniciando análise melhorada...');
             
             try {
                 analyzedData = [];
                 for (let i = 0; i < files.length; i++) {
                     debugLog(`Processando ${files[i].name} (${i + 1}/${files.length})`);
-                    await processFile(files[i], i + 1, files.length);
+                    await processFileImproved(files[i], i + 1, files.length);
                 }
                 
-                debugLog(`Análise concluída: ${analyzedData.length} candidatos encontrados`);
+                debugLog(`✅ Análise concluída: ${analyzedData.length} candidatos encontrados`);
                 
                 if (analyzedData.length > 0) {
-                    generateDashboard();
-                    showDashboard();
-                    showMessage(`Análise concluída! ${analyzedData.length} candidatos processados com sucesso.`, 'success');
+                    updateStats();
+                    showResults();
+                    showMessage(`🎉 Análise concluída! ${analyzedData.length} candidatos processados com precisão melhorada.`, 'success');
                 } else {
-                    showMessage('Nenhum candidato válido foi encontrado. Verifique se os PDFs contêm currículos com informações legíveis.', 'error');
+                    showMessage('Nenhum candidato válido foi encontrado. Verifique se os PDFs contêm currículos válidos.', 'error');
                 }
                 
             } catch (error) {
-                debugLog('Erro durante análise: ' + error.message);
+                debugLog('❌ Erro durante análise: ' + error.message);
                 showMessage('Erro durante a análise: ' + error.message, 'error');
                 console.error('Erro completo:', error);
             }
@@ -1641,153 +460,82 @@
             hideLoading();
         }
 
-        function showLoading() {
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.display = 'block';
-            document.getElementById('analyzeBtn').disabled = true;
-        }
-
-        function hideLoading() {
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.display = 'none';
-            document.getElementById('analyzeBtn').disabled = false;
-        }
-
-        function updateProgress(current, total) {
-            const progress = (current / total) * 100;
-            const progressFill = document.getElementById('progressFill');
-            if (progressFill) {
-                progressFill.style.width = `${progress}%`;
-            }
-        }
-
-        async function processFile(file, index, total) {
+        async function processFileImproved(file, index, total) {
             updateProgress(index - 0.5, total);
 
             try {
-                debugLog(`Lendo arquivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
-                
                 const arrayBuffer = await file.arrayBuffer();
-                debugLog('ArrayBuffer criado, carregando PDF...');
-                
                 const pdf = await pdfjsLib.getDocument({
                     data: arrayBuffer,
                     cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
                     cMapPacked: true
                 }).promise;
                 
-                debugLog(`PDF carregado: ${pdf.numPages} página(s)`);
+                debugLog(`📄 PDF carregado: ${pdf.numPages} página(s)`);
                 
                 let fullText = '';
                 for (let i = 1; i <= pdf.numPages; i++) {
                     const page = await pdf.getPage(i);
                     const textContent = await page.getTextContent();
                     const pageText = textContent.items.map(item => item.str).join(' ');
-                    fullText += pageText + ' ';
+                    fullText += pageText + '\n';
                 }
 
-                debugLog(`Texto extraído: ${fullText.length} caracteres`);
+                debugLog(`📝 Texto extraído: ${fullText.length} caracteres`);
 
-                // Detectar se é PDF unificado ou individual
-                const candidates = splitUnifiedPDF(fullText, file.name);
+                // Detectar e processar candidatos
+                const candidates = splitUnifiedPDFImproved(fullText, file.name);
                 
-                
-if (candidates.length > 1) {
-    debugLog(`PDF unificado detectado: ${candidates.length} candidatos`);
-    candidates.forEach(candidateData => {
-        if (
-            candidateData.name &&
-            candidateData.name.length > 2 &&
-            !isInvalidCandidateName(candidateData.name)
-        ) {
-            analyzedData.push(candidateData);
-            debugLog(`Candidato adicionado: ${candidateData.name}`);
-        } else {
-            debugLog(`Candidato descartado: ${candidateData.name || 'sem nome'}`);
-        }
-    });
-} else {
-    debugLog('PDF individual processado');
-    const candidateData = extractCandidateInfo(fullText, file.name);
-    if (candidateData.name && !isInvalidCandidateName(candidateData.name)) {
-        analyzedData.push(candidateData);
-        debugLog(`Candidato individual adicionado: ${candidateData.name}`);
-    }
-}
+                candidates.forEach(candidateData => {
+                    if (candidateData.name && candidateData.name.length > 2 && !isInvalidCandidateName(candidateData.name)) {
+                        analyzedData.push(candidateData);
+                        debugLog(`✅ Candidato adicionado: ${candidateData.name}`);
+                    } else {
+                        debugLog(`❌ Candidato descartado: ${candidateData.name || 'sem nome'}`);
+                    }
+                });
 
-updateProgress(index, total);
+                updateProgress(index, total);
+            } catch (error) {
+                debugLog(`❌ Erro no processamento: ${error.message}`);
+                throw error;
+            }
         }
 
-        function isInvalidCandidateName(name) {
-            const invalidPatterns = [
-                /^(sp|são paulo|brasileiro|experiência|cursos|formação|objetivo|resumo)$/i,
-                /^[a-z\s]{1,5}$/i,
-                /^(complementares|profissional|acadêmica|qualificações|informações)$/i,
-                /^\d+\.?\s*$/,
-                /^[^\w\s]+$/,
-            ];
-            
-            return invalidPatterns.some(pattern => pattern.test(name.trim()));
-        }
+        function splitUnifiedPDFImproved(fullText, filename) {
+            debugLog('🔍 Iniciando divisão melhorada do PDF...');
 
-        function splitUnifiedPDF(fullText, filename) {
-            debugLog('Iniciando divisão do PDF...');
-
-
+            // Padrões melhorados baseados no PDF de referência
             const candidateSeparators = [
-                  /(?=\d+\.\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]+(?:\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]+)+\s+Cand-\d+)/g
-                ];
+                // Padrão: número. Nome Cand-ID
+                /(?=\d+\.\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ\s]+\s+Cand-\d+)/g,
+                // Padrão: Nome direto seguido de informações
+                /(?=[A-ZÁÊÀÍÓÚ][A-ZÁÊÀÍÓÚÇÃÕ\s]{10,50}\n.*?(?:Brasileiro|anos|Casado|Solteiro|Objetivo))/g,
+                // Padrão de quebra por seções de currículo
+                /(?=Objetivo\s*Profissional|OBJETIVO|Formação\s*Acadêmica)/g
+            ];
 
-
-
-
-            let candidates = [];
             let bestSplit = [fullText];
-
+            
             for (let separator of candidateSeparators) {
                 const splits = fullText.split(separator).filter(section => section.trim().length > 100);
                 
                 if (splits.length > bestSplit.length) {
                     bestSplit = splits;
+                    debugLog(`📊 Melhor divisão encontrada: ${splits.length} seções`);
                 }
             }
 
-            // Método específico para formato "número. Nome Cand-ID"
-            if (bestSplit.length === 1) {
-                const candidatePattern = /(\d+\.\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ\s]+\s+Cand-\d+)/g;
-                const candidateMatches = [...fullText.matchAll(candidatePattern)];
-                
-                if (candidateMatches.length > 1) {
-                    debugLog(`Encontrados ${candidateMatches.length} padrões de candidato`);
-                    
-                    bestSplit = [];
-                    const positions = candidateMatches.map(match => match.index);
-                    
-                    for (let i = 0; i < positions.length; i++) {
-                        const start = positions[i];
-                        const end = i === positions.length - 1 ? fullText.length : positions[i + 1];
-                        const section = fullText.substring(start, end);
-                        
-                        if (section.trim().length > 50) {
-                            bestSplit.push(section);
-                        }
-                    }
-                }
-            }
+            debugLog(`📈 Divisão final: ${bestSplit.length} seções para processar`);
 
-            debugLog(`Divisão final: ${bestSplit.length} seções`);
-
+            const candidates = [];
             bestSplit.forEach((section, index) => {
                 if (section.trim().length > 50) {
-                    const candidateData = extractCandidateInfo(section, `${filename}_candidato_${index + 1}`);
+                    const candidateData = extractCandidateInfoImproved(section, `${filename}_candidato_${index + 1}`);
                     
-                    if (candidateData.name && 
-                        candidateData.name.length > 3 && 
-                        !candidateData.name.toLowerCase().includes('experiência') &&
-                        !candidateData.name.toLowerCase().includes('brasileiro') &&
-                        !candidateData.name.toLowerCase().includes('cursos')) {
+                    if (candidateData.name && candidateData.name.length > 3) {
                         candidates.push(candidateData);
-                        debugLog(`Candidato válido: ${candidateData.name}`);
+                        debugLog(`✨ Candidato processado: ${candidateData.name}`);
                     }
                 }
             });
@@ -1795,22 +543,7 @@ updateProgress(index, total);
             return candidates;
         }
 
-        function extractCandidateInfo(text, filename) {
-            const patterns = {
-                name: /(?:^|\n)([A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]+(?:\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]*)*(?:\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]+)*)\s*(?:\n|•|Brasileiro|Casado|Solteiro|\d+\s*anos|Data|Endereço|Rua|Objetivo)/gm,
-                alternativeName: /\n([A-ZÁÊÀÍÓÚ][A-ZÁÊÀÍÓÚÇÃÕ\s]{10,50})\n.*?(?:Brasileiro|anos|Casado|Solteiro|Objetivo)/,
-                candidateId: /Cand-(\d+)/,
-                age: /(\d{1,2})\s*anos(?:\s|,|\.)|Data.*?(\d{2})\/(\d{2})\/(\d{4})|Nascimento.*?(\d{2})\/(\d{2})\/(\d{4})|(\d{4})\s*[-–]\s*(Casado|Solteiro|União)/i,
-                city: /(Jundiaí|Várzea Paulista|Campo Limpo(?:\s+Paulista|\s+Pta)?|Cajamar|Itupeva|Franco da Rocha|São Paulo|Cabreúva|Louveira|Itatiba|Sorocaba|Campinas|Santos|Indaiatuba|Parelheiros)/i,
-                address: /(?:Endereço|Rua|Avenida|Av\.|R\.)[\s:]*([^,\n]+(?:,\s*[^,\n]+)*)/i,
-                profile: /(Preparador|Operador|PREPARADOR|OPERADOR|Prep\.?\s*Op\.?\s*CNC|Multifuncional|Setup|Preset)/gi,
-                machines: /(Torno\s+CNC|Centro\s+de\s+Usinagem|Torno\s+Vertical|Torno\s+Horizontal|centro\s+de\s+usinagem|torno\s+cnc|CNC|Retífica|Fresadora|Mandriladora)/gi,
-                education: /(Ensino\s+Médio|Superior|Técnico|Graduação|Engenharia|Tecnólogo|Bacharel)/i,
-                experience: /(\d{4})\s*[-–]\s*(\d{4}|atual|presente|\w+)|Período.*?(\d{1,2})\/(\d{4}).*?(\d{1,2})\/(\d{4})|(\d{2}\/\d{2}\/\d{4})\s*[-–]\s*(\d{2}\/\d{2}\/\d{4})/g,
-                senaiCourse: /(SENAI|Senai).*?(Programação|Operação|Torno|Centro|Usinagem|CNC|Mecânica)/gi,
-                companies: /(ThyssenKrupp|SKF|Continental|Dana|Knorr|Sifco|Dexco|Klabin|Joyson|Alpino|Procter|Gamble)/gi
-            };
-
+        function extractCandidateInfoImproved(text, filename) {
             const candidate = {
                 name: '',
                 age: 0,
@@ -1829,26 +562,49 @@ updateProgress(index, total);
                 fullAddress: ''
             };
 
-            // Extrair e validar nome
-            let validName = '';
-            const nameMatches = text.match(patterns.name) || [];
-            for (let nameMatch of nameMatches) {
-                const cleanName = nameMatch.trim().replace(/[•\n\r\t]/g, ' ').replace(/\s+/g, ' ');
+            // Padrões melhorados baseados nos dados reais
+            const patterns = {
+                // Nome melhorado - captura nomes compostos
+                name: /(?:^|\n)([A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]+(?:\s+[a-záêàíóúçãõ]*)*(?:\s+[A-ZÁÊÀÍÓÚ][a-záêàíóúçãõ]+)*)\s*(?:\n|•|Brasileiro|Casado|Solteiro|\d+\s*anos|Data|Endereço|Rua|Objetivo)/m,
+                
+                // ID do candidato
+                candidateId: /Cand-(\d+)/i,
+                
+                // Idade melhorada - múltiplos formatos
+                age: /(\d{1,2})\s*anos|Data.*?nascimento.*?(\d{2})\/(\d{2})\/(\d{4})|(\d{4})\s*[-–]\s*(Casado|Solteiro)/i,
+                
+                // Cidades da região específica (+ Itupeva destacada)
+                city: /(Jundiaí|Várzea\s+Paulista|Campo\s+Limpo(?:\s+Paulista|\s+Pta)?|Cajamar|Itupeva|Franco\s+da\s+Rocha|São\s+Paulo|Cabreúva|Louveira|Itatiba|Sorocaba|Campinas|Santos|Indaiatuba)/i,
+                
+                // Endereço completo
+                address: /(?:Endereço|Rua|Avenida|Av\.)[\s:]*([^,\n]+(?:,\s*[^,\n]+)*)/i,
+                
+                // Perfil profissional melhorado
+                profile: /(Preparador|Operador|PREPARADOR|OPERADOR|Prep\.?\s*Op\.?\s*CNC|Multifuncional|Setup|Preset)/gi,
+                
+                // Tipos de máquina
+                machines: /(Torno\s+CNC|Centro\s+de\s+Usinagem|Torno\s+Vertical|Torno\s+Horizontal|centro\s+de\s+usinagem|torno\s+cnc|CNC|Retífica|Fresadora)/gi,
+                
+                // Educação
+                education: /(Ensino\s+Médio|Superior|Técnico|Graduação|Engenharia|Tecnólogo|Bacharel)/i,
+                
+                // Experiência profissional melhorada
+                experience: /(\d{4})\s*[-–]\s*(\d{4}|atual|presente|\w+)|Período.*?(\d{1,2})\/(\d{4}).*?(\d{1,2})\/(\d{4})/g,
+                
+                // Cursos SENAI
+                senaiCourse: /(SENAI|Senai).*?(Programação|Operação|Torno|Centro|Usinagem|CNC|Mecânica)/gi,
+                
+                // Empresas relevantes
+                companies: /(ThyssenKrupp|SKF|Continental|Dana|Knorr|Sifco|Dexco|Klabin|Joyson|Alpino|Procter|Gamble|Mark\s+Ferramentas)/gi
+            };
+
+            // Extrair nome
+            const nameMatch = text.match(patterns.name);
+            if (nameMatch) {
+                const cleanName = nameMatch[1].trim().replace(/[•\n\r\t]/g, ' ').replace(/\s+/g, ' ');
                 if (isValidName(cleanName)) {
-                    validName = cleanName;
-                    break;
+                    candidate.name = normalizeName(cleanName);
                 }
-            }
-            
-            if (!validName) {
-                const altMatch = text.match(patterns.alternativeName);
-                if (altMatch && isValidName(altMatch[1])) {
-                    validName = altMatch[1].trim();
-                }
-            }
-            
-            if (validName) {
-                candidate.name = normalizeName(validName);
             }
 
             // Extrair ID do candidato
@@ -1873,21 +629,10 @@ updateProgress(index, total);
                 }
             }
 
-            // Extrair endereço completo
-            const addressMatch = text.match(patterns.address);
-            if (addressMatch) {
-                candidate.fullAddress = addressMatch[1].trim();
-            }
-
-            // Extrair e normalizar cidade
+            // Extrair cidade
             const cityMatch = text.match(patterns.city);
             if (cityMatch) {
                 candidate.city = normalizeCity(cityMatch[1]);
-            } else if (candidate.fullAddress) {
-                const cityFromAddress = extractCityFromAddress(candidate.fullAddress);
-                if (cityFromAddress) {
-                    candidate.city = cityFromAddress;
-                }
             }
 
             // Determinar perfil
@@ -1902,34 +647,27 @@ updateProgress(index, total);
             const educationMatch = text.match(patterns.education);
             if (educationMatch) {
                 candidate.education = normalizeEducation(educationMatch[1]);
-            } else if (text.toLowerCase().includes('médio')) {
-                candidate.education = 'Ensino Médio';
             }
 
             // Contar cursos SENAI
             const senaiMatches = text.match(patterns.senaiCourse) || [];
             candidate.senaiCourses = senaiMatches.length;
-            if (candidate.senaiCourses > 2) {
-                candidate.strengths.push('Múltiplos Cursos SENAI');
-            }
 
-            // Extrair empresas relevantes
+            // Extrair empresas
             const companyMatches = text.match(patterns.companies) || [];
             candidate.companies = [...new Set(companyMatches)];
-            if (candidate.companies.length > 2) {
-                candidate.strengths.push('Experiência Diversificada');
-            }
 
             // Calcular experiência
             candidate.experienceYears = calculateExperience(text, patterns.experience);
 
-            // Sistema de pontuação e categorização
+            // Calcular score e categoria
             candidate.score = calculateCandidateScore(candidate);
             candidate.category = categorizeCandidateByScore(candidate);
 
             return candidate;
         }
 
+        // Funções auxiliares (mantidas do original mas com melhorias)
         function isValidName(name) {
             const invalidNames = [
                 'brasileiro', 'brasileira', 'casado', 'casada', 'solteiro', 'solteira',
@@ -1938,17 +676,22 @@ updateProgress(index, total);
             ];
             
             const nameLower = name.toLowerCase();
-            
             for (let invalid of invalidNames) {
-                if (nameLower.includes(invalid)) {
-                    return false;
-                }
+                if (nameLower.includes(invalid)) return false;
             }
             
             const words = name.trim().split(/\s+/);
-            if (words.length < 2) return false;
+            return words.length >= 2 && words.every(word => word.length >= 2);
+        }
+
+        function isInvalidCandidateName(name) {
+            const invalidPatterns = [
+                /^(sp|são paulo|brasileiro|experiência|cursos|formação|objetivo|resumo)$/i,
+                /^[a-z\s]{1,5}$/i,
+                /^\d+\.?\s*$/,
+            ];
             
-            return words.every(word => word.length >= 2);
+            return invalidPatterns.some(pattern => pattern.test(name.trim()));
         }
 
         function normalizeName(name) {
@@ -1964,26 +707,17 @@ updateProgress(index, total);
                 'campo limpo pta': 'Campo Limpo Paulista',
                 'várzea paulista': 'Várzea Paulista',
                 'varzea paulista': 'Várzea Paulista',
+                'itupeva': 'Itupeva',
                 'jundiai': 'Jundiaí',
-                'jundiaí': 'Jundiaí'
+                'jundiaí': 'Jundiaí',
+                'cajamar': 'Cajamar',
+                'franco da rocha': 'Franco da Rocha',
+                'sao paulo': 'São Paulo',
+                'são paulo': 'São Paulo'
             };
             
             const cityLower = city.toLowerCase().trim();
             return cityNormalizations[cityLower] || city.trim();
-        }
-
-        function extractCityFromAddress(address) {
-            const cities = [
-                'Jundiaí', 'Várzea Paulista', 'Campo Limpo Paulista', 
-                'Cajamar', 'Itupeva', 'Franco da Rocha', 'São Paulo'
-            ];
-            
-            for (let city of cities) {
-                if (address.toLowerCase().includes(city.toLowerCase())) {
-                    return normalizeCity(city);
-                }
-            }
-            return null;
         }
 
         function determineProfile(profileMatches, text) {
@@ -1997,15 +731,10 @@ updateProgress(index, total);
                 p.toLowerCase().includes('operador') && !p.toLowerCase().includes('preparador')
             ).length;
             
-            if (preparadorCount > 0 && operadorCount > 0) {
-                return 'mixed';
-            } else if (preparadorCount > operadorCount) {
-                return 'preparador';
-            } else if (operadorCount > 0) {
-                return 'operador';
-            } else {
-                return 'operador';
-            }
+            if (preparadorCount > 0 && operadorCount > 0) return 'mixed';
+            else if (preparadorCount > operadorCount) return 'preparador';
+            else if (operadorCount > 0) return 'operador';
+            else return 'operador';
         }
 
         function determineMachineType(machineMatches, text) {
@@ -2017,28 +746,18 @@ updateProgress(index, total);
                 m.toLowerCase().includes('centro') || m.toLowerCase().includes('usinagem')
             ).length;
 
-            if (tornoCount > 0 && centroCount > 0) {
-                return 'ambos';
-            } else if (tornoCount > centroCount && centroCount === 0) {
-                return 'torno';
-            } else if (centroCount > tornoCount && tornoCount === 0) {
-                return 'centro';
-            } else if (tornoCount > 0 || centroCount > 0) {
-                return 'ambos';
-            } else {
-                return 'nao_especificado';
-            }
+            if (tornoCount > 0 && centroCount > 0) return 'ambos';
+            else if (tornoCount > centroCount && centroCount === 0) return 'torno';
+            else if (centroCount > tornoCount && tornoCount === 0) return 'centro';
+            else if (tornoCount > 0 || centroCount > 0) return 'ambos';
+            else return 'nao_especificado';
         }
 
         function normalizeEducation(education) {
             const eduLower = education.toLowerCase();
-            if (eduLower.includes('superior') || eduLower.includes('engenharia') || eduLower.includes('bacharel')) {
-                return 'Superior';
-            } else if (eduLower.includes('técnico')) {
-                return 'Técnico';
-            } else {
-                return 'Ensino Médio';
-            }
+            if (eduLower.includes('superior') || eduLower.includes('engenharia')) return 'Superior';
+            else if (eduLower.includes('técnico')) return 'Técnico';
+            else return 'Ensino Médio';
         }
 
         function calculateExperience(text, experiencePattern) {
@@ -2076,46 +795,40 @@ updateProgress(index, total);
         function calculateCandidateScore(candidate) {
             let score = 0;
             
-            // Pontuação por experiência (40% do score)
+            // Experiência (40%)
             if (candidate.experienceYears >= 20) score += 40;
             else if (candidate.experienceYears >= 15) score += 35;
             else if (candidate.experienceYears >= 10) score += 30;
             else if (candidate.experienceYears >= 5) score += 20;
             else if (candidate.experienceYears >= 2) score += 10;
             
-            // Pontuação por perfil (20% do score)
+            // Perfil (20%)
             if (candidate.profile === 'preparador') score += 20;
             else if (candidate.profile === 'mixed') score += 18;
             else if (candidate.profile === 'operador') score += 15;
             
-            // Pontuação por versatilidade (15% do score)
+            // Versatilidade (15%)
             if (candidate.machineType === 'ambos') {
                 score += 15;
-                if (!candidate.strengths.includes('Versátil')) {
-                    candidate.strengths.push('Versátil');
-                }
+                candidate.strengths.push('Versátil');
             } else if (candidate.machineType === 'centro') {
                 score += 10;
             } else if (candidate.machineType === 'torno') {
                 score += 8;
             }
             
-            // Pontuação por educação (15% do score)
+            // Educação (15%)
             if (candidate.education === 'Superior') {
                 score += 15;
-                if (!candidate.strengths.includes('Formação Superior')) {
-                    candidate.strengths.push('Formação Superior');
-                }
+                candidate.strengths.push('Formação Superior');
             } else if (candidate.education === 'Técnico') {
                 score += 10;
-                if (!candidate.strengths.includes('Formação Técnica')) {
-                    candidate.strengths.push('Formação Técnica');
-                }
+                candidate.strengths.push('Formação Técnica');
             } else if (candidate.education === 'Ensino Médio') {
                 score += 5;
             }
             
-            // Bonificações (10% do score)
+            // Bonificações (10%)
             if (candidate.senaiCourses >= 3) score += 5;
             if (candidate.companies.length >= 3) score += 3;
             if (candidate.age >= 25 && candidate.age <= 40) score += 2;
@@ -2130,438 +843,17 @@ updateProgress(index, total);
             else return 'D';
         }
 
-        function generateDashboard() {
-            debugLog(`Gerando dashboard com ${analyzedData.length} candidatos`);
-            
-            // Remover duplicados
-            analyzedData = removeDuplicates(analyzedData);
-            
-            updateStats();
-            createCharts();
-            createCandidateTable();
-            createStrategicInsights();
-            createTopCandidates();
-            createHiringStrategy();
-            populateFilters();
-            
-            debugLog('Dashboard gerado com sucesso');
-        }
-
-        function removeDuplicates(candidates) {
-            const seen = new Set();
-            return candidates.filter(candidate => {
-                const normalizedName = candidate.name.toLowerCase()
-                    .replace(/\s+/g, ' ')
-                    .trim();
-                
-                if (seen.has(normalizedName) || normalizedName.length < 3) {
-                    return false;
-                }
-                seen.add(normalizedName);
-                return true;
-            });
-        }
-
-        function createStrategicInsights() {
-            const insightsHtml = `
-                <div class="strategic-insights">
-                    <div class="insights-header">
-                        <h2>🎯 Insights Estratégicos</h2>
-                    </div>
-                    <div class="insights-grid">
-                        <div class="insight-card strengths">
-                            <h3>✅ Pontos Fortes</h3>
-                            <ul>
-                                <li><strong>${Math.round((analyzedData.filter(c => c.machineType === 'ambos').length / analyzedData.length) * 100)}% são versáteis</strong> (trabalham com ambas máquinas)</li>
-                                <li><strong>${Math.round((analyzedData.filter(c => ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista'].includes(c.city)).length / analyzedData.length) * 100)}% estão na região</strong> (logística favorável)</li>
-                                <li><strong>Experiência sólida:</strong> ${Math.round(analyzedData.reduce((sum, c) => sum + c.experienceYears, 0) / analyzedData.length)} anos de média</li>
-                                <li><strong>${analyzedData.filter(c => c.education === 'Superior').length} candidatos com formação superior</strong></li>
-                                <li><strong>Pool robusto:</strong> ${analyzedData.length} candidatos qualificados</li>
-                            </ul>
-                        </div>
-                        <div class="insight-card attention">
-                            <h3>⚠️ Pontos de Atenção</h3>
-                            <ul>
-                                <li><strong>Idade média elevada:</strong> ${Math.round(analyzedData.reduce((sum, c) => sum + c.age, 0) / analyzedData.length)} anos - equilibrar com jovens</li>
-                                <li><strong>Poucos multifuncionais:</strong> ${analyzedData.filter(c => c.profile === 'mixed').length} candidatos - oportunidade de desenvolvimento</li>
-                                <li><strong>Predominância ensino médio:</strong> ${Math.round((analyzedData.filter(c => c.education === 'Ensino Médio').length / analyzedData.length) * 100)}% - investir em capacitação</li>
-                                <li><strong>Especialização necessária:</strong> equilibrar generalistas vs especialistas</li>
-                            </ul>
-                        </div>
-                        <div class="insight-card recommendations">
-                            <h3>🚀 Recomendações</h3>
-                            <ul>
-                                <li><strong>Priorizar versáteis</strong> (ambas máquinas) para flexibilidade</li>
-                                <li><strong>Equilibrar gerações:</strong> seniors (experiência) + juniors (inovação)</li>
-                                <li><strong>Focar na região:</strong> Várzea Paulista/Jundiaí (menor deslocamento)</li>
-                                <li><strong>Investir em multifuncionais:</strong> preparador + operador</li>
-                                <li><strong>Valorizar formação técnica/superior</strong> quando disponível</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            const dashboard = document.getElementById('dashboard');
-            const candidateTable = document.querySelector('.candidate-table');
-            dashboard.insertBefore(createElementFromHTML(insightsHtml), candidateTable);
-        }
-
-        function createTopCandidates() {
-            const categoryA = analyzedData.filter(c => c.category === 'A').sort((a, b) => b.score - a.score);
-            const categoryB = analyzedData.filter(c => c.category === 'B').sort((a, b) => b.score - a.score);
-            const categoryC = analyzedData.filter(c => c.category === 'C').sort((a, b) => b.score - a.score);
-            
-            const seniorPreparers = analyzedData.filter(c => 
-                c.profile === 'preparador' && c.experienceYears >= 15
-            ).sort((a, b) => b.experienceYears - a.experienceYears);
-            
-            const youngTalents = analyzedData.filter(c => 
-                c.age <= 30 && c.experienceYears >= 3
-            ).sort((a, b) => b.score - a.score);
-            
-            const versatileWorkers = analyzedData.filter(c => 
-                c.machineType === 'ambos' && c.experienceYears >= 8
-            ).sort((a, b) => b.experienceYears - a.experienceYears);
-
-            const topCandidatesHtml = `
-                <div class="top-candidates">
-                    <div class="top-header">
-                        <h2>🏆 Top Candidatos por Categoria</h2>
-                        <p>Sistema de pontuação baseado em experiência, perfil, versatilidade e formação</p>
-                    </div>
-                    
-                    <div class="category-tabs">
-                        <button class="tab-button active" data-tab="category-a">🥇 Categoria A (${categoryA.length})</button>
-                        <button class="tab-button" data-tab="category-b">🥈 Categoria B (${categoryB.length})</button>
-                        <button class="tab-button" data-tab="category-c">🥉 Categoria C (${categoryC.length})</button>
-                        <button class="tab-button" data-tab="senior-prep">🔧 Preparadores Seniores (${seniorPreparers.length})</button>
-                        <button class="tab-button" data-tab="young-talents">🌟 Jovens Talentos (${youngTalents.length})</button>
-                        <button class="tab-button" data-tab="versatile">🔧⚙️ Versáteis (${versatileWorkers.length})</button>
-                    </div>
-
-                    <div class="tab-content active" id="category-a">
-                        <h3>🥇 Categoria A - Candidatos Premium (Score 80+)</h3>
-                        <div class="candidates-list">
-                            ${categoryA.slice(0, 5).map((c, i) => `
-                                <div class="candidate-card premium">
-                                    <div class="candidate-header">
-                                        <span class="rank">#${i + 1}</span>
-                                        <span class="name">${c.name}</span>
-                                        <span class="score">Score: ${c.score}</span>
-                                    </div>
-                                    <div class="candidate-details">
-                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)}</span>
-                                        <span class="experience">${c.experienceYears} anos exp.</span>
-                                        <span class="age">${c.age} anos</span>
-                                        <span class="location">${c.city || 'N/I'}</span>
-                                    </div>
-                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
-                                    ${c.strengths.length > 0 ? `<div class="strengths">${c.strengths.join(', ')}</div>` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="category-b">
-                        <h3>🥈 Categoria B - Candidatos Sólidos (Score 65-79)</h3>
-                        <div class="candidates-list">
-                            ${categoryB.slice(0, 5).map((c, i) => `
-                                <div class="candidate-card solid">
-                                    <div class="candidate-header">
-                                        <span class="rank">#${i + 1}</span>
-                                        <span class="name">${c.name}</span>
-                                        <span class="score">Score: ${c.score}</span>
-                                    </div>
-                                    <div class="candidate-details">
-                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)}</span>
-                                        <span class="experience">${c.experienceYears} anos exp.</span>
-                                        <span class="age">${c.age} anos</span>
-                                        <span class="location">${c.city || 'N/I'}</span>
-                                    </div>
-                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
-                                    ${c.strengths.length > 0 ? `<div class="strengths">${c.strengths.join(', ')}</div>` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="category-c">
-                        <h3>🥉 Categoria C - Candidatos com Potencial (Score 50-64)</h3>
-                        <div class="candidates-list">
-                            ${categoryC.slice(0, 5).map((c, i) => `
-                                <div class="candidate-card potential">
-                                    <div class="candidate-header">
-                                        <span class="rank">#${i + 1}</span>
-                                        <span class="name">${c.name}</span>
-                                        <span class="score">Score: ${c.score}</span>
-                                    </div>
-                                    <div class="candidate-details">
-                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)}</span>
-                                        <span class="experience">${c.experienceYears} anos exp.</span>
-                                        <span class="age">${c.age} anos</span>
-                                        <span class="location">${c.city || 'N/I'}</span>
-                                    </div>
-                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
-                                    ${c.strengths.length > 0 ? `<div class="strengths">${c.strengths.join(', ')}</div>` : ''}
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="senior-prep">
-                        <h3>🔧 Preparadores Seniores - Para Liderança Técnica</h3>
-                        <div class="candidates-list">
-                            ${seniorPreparers.slice(0, 5).map((c, i) => `
-                                <div class="candidate-card senior">
-                                    <div class="candidate-header">
-                                        <span class="rank">#${i + 1}</span>
-                                        <span class="name">${c.name}</span>
-                                        <span class="score">Score: ${c.score}</span>
-                                    </div>
-                                    <div class="candidate-details">
-                                        <span class="profile preparador">🔧 PREPARADOR SENIOR</span>
-                                        <span class="experience">${c.experienceYears} anos exp.</span>
-                                        <span class="age">${c.age} anos</span>
-                                        <span class="location">${c.city || 'N/I'}</span>
-                                    </div>
-                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
-                                    <div class="education">Formação: ${c.education}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="young-talents">
-                        <h3>🌟 Jovens Talentos - Para Renovação e Crescimento</h3>
-                        <div class="candidates-list">
-                            ${youngTalents.slice(0, 5).map((c, i) => `
-                                <div class="candidate-card young">
-                                    <div class="candidate-header">
-                                        <span class="rank">#${i + 1}</span>
-                                        <span class="name">${c.name}</span>
-                                        <span class="score">Score: ${c.score}</span>
-                                    </div>
-                                    <div class="candidate-details">
-                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)} JOVEM</span>
-                                        <span class="experience">${c.experienceYears} anos exp.</span>
-                                        <span class="age">${c.age} anos</span>
-                                        <span class="location">${c.city || 'N/I'}</span>
-                                    </div>
-                                    <div class="candidate-machine">${getMachineLabel(c.machineType)}</div>
-                                    <div class="potential">💡 Alto potencial de crescimento</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="versatile">
-                        <h3>🔧⚙️ Profissionais Versáteis - Máxima Flexibilidade</h3>
-                        <div class="candidates-list">
-                            ${versatileWorkers.slice(0, 5).map((c, i) => `
-                                <div class="candidate-card versatile">
-                                    <div class="candidate-header">
-                                        <span class="rank">#${i + 1}</span>
-                                        <span class="name">${c.name}</span>
-                                        <span class="score">Score: ${c.score}</span>
-                                    </div>
-                                    <div class="candidate-details">
-                                        <span class="profile ${c.profile}">${getProfileLabel(c.profile)}</span>
-                                        <span class="experience">${c.experienceYears} anos exp.</span>
-                                        <span class="age">${c.age} anos</span>
-                                        <span class="location">${c.city || 'N/I'}</span>
-                                    </div>
-                                    <div class="candidate-machine">🔧⚙️ TORNO + CENTRO DE USINAGEM</div>
-                                    <div class="versatility">⭐ Máxima versatilidade operacional</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            const dashboard = document.getElementById('dashboard');
-            const candidateTable = document.querySelector('.candidate-table');
-            dashboard.insertBefore(createElementFromHTML(topCandidatesHtml), candidateTable);
-            
-            setupTabFunctionality();
-        }
-
-        function createHiringStrategy() {
-            const categoryA = analyzedData.filter(c => c.category === 'A');
-            const seniorPreparers = analyzedData.filter(c => c.profile === 'preparador' && c.experienceYears >= 15);
-            const youngTalents = analyzedData.filter(c => c.age <= 30 && c.experienceYears >= 3);
-            const engineers = analyzedData.filter(c => c.education === 'Superior');
-            
-            const strategyHtml = `
-                <div class="hiring-strategy">
-                    <div class="strategy-header">
-                        <h2>📋 Estratégia de Contratação Recomendada</h2>
-                        <p>Baseada na análise de ${analyzedData.length} candidatos qualificados</p>
-                    </div>
-                    
-                    <div class="strategy-phases">
-                        <div class="phase-card priority">
-                            <div class="phase-header">
-                                <h3>🚀 FASE 1 - Contratações Prioritárias (2-3 pessoas)</h3>
-                                <span class="phase-timeline">Imediato</span>
-                            </div>
-                            <div class="recommendations">
-                                <div class="recommendation">
-                                    <strong>1 Preparador Senior:</strong> 
-                                    ${seniorPreparers.slice(0, 2).map(c => c.name).join(' ou ')}
-                                    <div class="reason">→ Liderança técnica e formação de equipe</div>
-                                </div>
-                                <div class="recommendation">
-                                    <strong>1 Jovem Talento:</strong> 
-                                    ${youngTalents.slice(0, 2).map(c => `${c.name} (${c.age} anos)`).join(' ou ')}
-                                    <div class="reason">→ Renovação e potencial de crescimento</div>
-                                </div>
-                                <div class="recommendation">
-                                    <strong>1 Categoria A:</strong> 
-                                    ${categoryA.slice(0, 2).map(c => `${c.name} (Score: ${c.score})`).join(' ou ')}
-                                    <div class="reason">→ Máxima qualificação e versatilidade</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="phase-card expansion">
-                            <div class="phase-header">
-                                <h3>📈 FASE 2 - Expansão da Equipe (3-4 pessoas)</h3>
-                                <span class="phase-timeline">30-60 dias</span>
-                            </div>
-                            <div class="recommendations">
-                                <div class="recommendation">
-                                    <strong>Operadores Experientes:</strong> 
-                                    Foco em candidatos com 10+ anos de experiência
-                                    <div class="reason">→ Estabilidade operacional</div>
-                                </div>
-                                <div class="recommendation">
-                                    <strong>Profissionais Versáteis:</strong> 
-                                    ${Math.round((analyzedData.filter(c => c.machineType === 'ambos').length / analyzedData.length) * 100)}% dos candidatos trabalham com ambas máquinas
-                                    <div class="reason">→ Flexibilidade operacional máxima</div>
-                                </div>
-                                <div class="recommendation">
-                                    <strong>Formação Superior:</strong> 
-                                    ${engineers.length} candidatos com nível superior disponíveis
-                                    <div class="reason">→ Capacidade analítica e inovação</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="phase-card development">
-                            <div class="phase-header">
-                                <h3>🎯 FASE 3 - Desenvolvimento Contínuo</h3>
-                                <span class="phase-timeline">Ongoing</span>
-                            </div>
-                            <div class="recommendations">
-                                <div class="recommendation">
-                                    <strong>Programa de Multifuncionais:</strong> 
-                                    Apenas ${analyzedData.filter(c => c.profile === 'mixed').length} candidatos multifuncionais
-                                    <div class="reason">→ Oportunidade de desenvolvimento interno</div>
-                                </div>
-                                <div class="recommendation">
-                                    <strong>Capacitação Técnica:</strong> 
-                                    ${Math.round((analyzedData.filter(c => c.education === 'Ensino Médio').length / analyzedData.length) * 100)}% têm apenas ensino médio
-                                    <div class="reason">→ Investimento em cursos técnicos/superiores</div>
-                                </div>
-                                <div class="recommendation">
-                                    <strong>Sucessão e Liderança:</strong> 
-                                    Preparar jovens talentos para cargos de preparação
-                                    <div class="reason">→ Continuidade e crescimento da operação</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="conclusion">
-                        <h3>💡 Conclusão Executiva</h3>
-                        <div class="conclusion-points">
-                            <div class="conclusion-item excellent">
-                                <span class="icon">✅</span>
-                                <div>
-                                    <strong>Pool Excelente:</strong> ${analyzedData.length} candidatos qualificados com ${Math.round(analyzedData.reduce((sum, c) => sum + c.experienceYears, 0) / analyzedData.length)} anos de experiência média
-                                </div>
-                            </div>
-                            <div class="conclusion-item good">
-                                <span class="icon">🎯</span>
-                                <div>
-                                    <strong>Versatilidade:</strong> ${Math.round((analyzedData.filter(c => c.machineType === 'ambos').length / analyzedData.length) * 100)}% trabalham com ambas máquinas (Torno + Centro)
-                                </div>
-                            </div>
-                            <div class="conclusion-item strategic">
-                                <span class="icon">📍</span>
-                                <div>
-                                    <strong>Logística Favorável:</strong> ${Math.round((analyzedData.filter(c => ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista'].includes(c.city)).length / analyzedData.length) * 100)}% concentrados na região
-                                </div>
-                            </div>
-                            <div class="conclusion-item recommendation">
-                                <span class="icon">🚀</span>
-                                <div>
-                                    <strong>Recomendação:</strong> Priorizar Categoria A e profissionais versáteis para máxima eficiência operacional
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            const dashboard = document.getElementById('dashboard');
-            dashboard.appendChild(createElementFromHTML(strategyHtml));
-        }
-
-        function getProfileLabel(profile) {
-            switch(profile) {
-                case 'preparador': return '🔧 Preparador';
-                case 'operador': return '⚙️ Operador';
-                case 'mixed': return '🔧⚙️ Multifuncional';
-                default: return '❓ Não especificado';
-            }
-        }
-
-        function getMachineLabel(type) {
-            switch(type) {
-                case 'torno': return '🔧 Torno CNC';
-                case 'centro': return '⚙️ Centro Usinagem';
-                case 'ambos': return '🔧⚙️ Ambos';
-                case 'nao_especificado': return '❓ Não especificado';
-                default: return '❓ Não especificado';
-            }
-        }
-
-        function createElementFromHTML(htmlString) {
-            const div = document.createElement('div');
-            div.innerHTML = htmlString.trim();
-            return div.firstChild;
-        }
-
-        function setupTabFunctionality() {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    tabButtons.forEach(b => b.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    
-                    button.classList.add('active');
-                    const targetTab = button.getAttribute('data-tab');
-                    document.getElementById(targetTab).classList.add('active');
-                });
-            });
-        }
-
         function updateStats() {
             const total = analyzedData.length;
             const preparadores = analyzedData.filter(c => c.profile === 'preparador').length;
             const operadores = analyzedData.filter(c => c.profile === 'operador').length;
-            const versateis = analyzedData.filter(c => c.machineType === 'ambos').length;
             const categoryA = analyzedData.filter(c => c.category === 'A').length;
             
             const avgAge = total > 0 ? Math.round(analyzedData.reduce((sum, c) => sum + c.age, 0) / total) : 0;
             const avgExp = total > 0 ? Math.round(analyzedData.reduce((sum, c) => sum + c.experienceYears, 0) / total) : 0;
-            
-            const regionalCities = ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista'];
+
+            // Cidades principais da região (incluindo Itupeva)
+            const regionalCities = ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista', 'Itupeva', 'Cajamar'];
             const regionalCount = analyzedData.filter(c => regionalCities.includes(c.city)).length;
             const regionalPercentage = total > 0 ? Math.round((regionalCount / total) * 100) : 0;
 
@@ -2570,385 +862,260 @@ updateProgress(index, total);
             document.getElementById('operadorCount').textContent = operadores;
             document.getElementById('avgAge').textContent = avgAge || 0;
             document.getElementById('avgExperience').textContent = avgExp || 0;
-            document.getElementById('versatileCount').textContent = versateis;
             document.getElementById('categoryACount').textContent = categoryA;
             document.getElementById('regionalCount').textContent = `${regionalPercentage}%`;
-        }
-
-        function createCharts() {
-            // Gráfico de perfis
-            const profileData = {
-                labels: ['🔧 Preparador CNC', '⚙️ Operador CNC', '🔧⚙️ Multifuncional'],
-                datasets: [{
-                    data: [
-                        analyzedData.filter(c => c.profile === 'preparador').length,
-                        analyzedData.filter(c => c.profile === 'operador').length,
-                        analyzedData.filter(c => c.profile === 'mixed').length
-                    ],
-                    backgroundColor: ['#27ae60', '#2196f3', '#ff9800'],
-                    borderWidth: 0
-                }]
-            };
-
-            charts.profile = new Chart(document.getElementById('profileChart'), {
-                type: 'doughnut',
-                data: profileData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de máquinas
-            const machineData = {
-                labels: ['🔧 Torno CNC', '⚙️ Centro de Usinagem', '🔧⚙️ Ambos'],
-                datasets: [{
-                    data: [
-                        analyzedData.filter(c => c.machineType === 'torno').length,
-                        analyzedData.filter(c => c.machineType === 'centro').length,
-                        analyzedData.filter(c => c.machineType === 'ambos').length
-                    ],
-                    backgroundColor: ['#e74c3c', '#9b59b6', '#34495e'],
-                    borderWidth: 0
-                }]
-            };
-
-            charts.machine = new Chart(document.getElementById('machineChart'), {
-                type: 'pie',
-                data: machineData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de idades
-            const ageRanges = ['18-25', '26-35', '36-45', '46+'];
-            const ageData = {
-                labels: ageRanges,
-                datasets: [{
-                    label: 'Candidatos',
-                    data: [
-                        analyzedData.filter(c => c.age >= 18 && c.age <= 25).length,
-                        analyzedData.filter(c => c.age >= 26 && c.age <= 35).length,
-                        analyzedData.filter(c => c.age >= 36 && c.age <= 45).length,
-                        analyzedData.filter(c => c.age >= 46).length
-                    ],
-                    backgroundColor: '#3498db',
-                    borderRadius: 5
-                }]
-            };
-
-            charts.age = new Chart(document.getElementById('ageChart'), {
-                type: 'bar',
-                data: ageData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de educação
-            const educationCounts = {};
-            analyzedData.forEach(c => {
-                const edu = c.education || 'Não informado';
-                educationCounts[edu] = (educationCounts[edu] || 0) + 1;
-            });
-
-            charts.education = new Chart(document.getElementById('educationChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(educationCounts),
-                    datasets: [{
-                        data: Object.values(educationCounts),
-                        backgroundColor: ['#1abc9c', '#f39c12', '#e67e22', '#95a5a6'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de localização
-            const locationCounts = {};
+            
+            // Debug das cidades encontradas
+            const cityCounts = {};
             analyzedData.forEach(c => {
                 const city = c.city || 'Não informado';
-                locationCounts[city] = (locationCounts[city] || 0) + 1;
+                cityCounts[city] = (cityCounts[city] || 0) + 1;
             });
-
-            charts.location = new Chart(document.getElementById('locationChart'), {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(locationCounts),
-                    datasets: [{
-                        label: 'Candidatos',
-                        data: Object.values(locationCounts),
-                        backgroundColor: '#16a085',
-                        borderRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de experiência
-            const expRanges = ['0-2 anos', '3-5 anos', '6-10 anos', '11+ anos'];
-            const expData = {
-                labels: expRanges,
-                datasets: [{
-                    label: 'Candidatos',
-                    data: [
-                        analyzedData.filter(c => c.experienceYears >= 0 && c.experienceYears <= 2).length,
-                        analyzedData.filter(c => c.experienceYears >= 3 && c.experienceYears <= 5).length,
-                        analyzedData.filter(c => c.experienceYears >= 6 && c.experienceYears <= 10).length,
-                        analyzedData.filter(c => c.experienceYears >= 11).length
-                    ],
-                    backgroundColor: '#8e44ad',
-                    borderRadius: 5
-                }]
-            };
-
-            charts.experience = new Chart(document.getElementById('experienceChart'), {
-                type: 'bar',
-                data: expData,
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            });
+            debugLog(`🏙️ Distribuição de cidades: ${JSON.stringify(cityCounts, null, 2)}`);
         }
 
-        function createCandidateTable() {
-            const table = document.getElementById('candidateTable');
-            const sortedData = [...analyzedData].sort((a, b) => b.score - a.score);
+        function generateFinalReport() {
+            debugLog('📊 Gerando relatório final...');
             
-            table.innerHTML = `
-                <div class="table-header-row">
-                    <div class="header-cell">Nome e Detalhes</div>
-                    <div class="header-cell">Categoria</div>
-                    <div class="header-cell">Score</div>
-                    <div class="header-cell">Perfil</div>
-                    <div class="header-cell">Máquina</div>
-                    <div class="header-cell">Experiência</div>
-                    <div class="header-cell">Idade</div>
-                    <div class="header-cell">Localização</div>
+            // Aqui vamos criar o relatório final estilo "paste-2.txt"
+            const reportWindow = window.open('', '_blank');
+            const reportHTML = createFinalReport();
+            
+            reportWindow.document.write(reportHTML);
+            reportWindow.document.close();
+            
+            showMessage('✅ Relatório final gerado com sucesso! Verifique a nova aba.', 'success');
+        }
+
+        function createFinalReport() {
+            const categoryA = analyzedData.filter(c => c.category === 'A').sort((a, b) => b.score - a.score);
+            const avgAge = Math.round(analyzedData.reduce((sum, c) => sum + c.age, 0) / analyzedData.length);
+            const avgExp = Math.round(analyzedData.reduce((sum, c) => sum + c.experienceYears, 0) / analyzedData.length);
+            const senaiPercentage = Math.round((analyzedData.filter(c => c.senaiCourses > 0).length / analyzedData.length) * 100);
+
+            return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Relatório de Análise - Candidatos CNC</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header h1 { color: #2c3e50; font-size: 2.5em; margin-bottom: 10px; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .stat-number { font-size: 3em; font-weight: bold; color: #3498db; margin-bottom: 10px; }
+        .stat-label { color: #7f8c8d; font-size: 1.1em; }
+        .recommendations {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .recommendations h2 { color: #2c3e50; font-size: 2em; margin-bottom: 20px; text-align: center; }
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #e74c3c;
+        }
+        .top-candidates {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .candidate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+        .candidate-name { font-weight: bold; color: #2c3e50; font-size: 1.1em; }
+        .candidate-details { color: #7f8c8d; font-size: 0.9em; margin-top: 5px; }
+        .candidate-score {
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Relatório de Análise - Candidatos CNC</h1>
+            <p>Análise Automatizada Melhorada - Preparadores e Operadores CNC</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">${analyzedData.length}</div>
+                <div class="stat-label">Total de Candidatos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${avgAge}</div>
+                <div class="stat-label">Idade Média (anos)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${avgExp}</div>
+                <div class="stat-label">Experiência Média (anos)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${senaiPercentage}%</div>
+                <div class="stat-label">Com Formação SENAI</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${Math.round((analyzedData.filter(c => ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista', 'Itupeva', 'Cajamar'].includes(c.city)).length / analyzedData.length) * 100)}%</div>
+                <div class="stat-label">Região Próxima (inc. Itupeva)</div>
+            </div>
+        </div>
+
+        <div class="top-candidates">
+            <h2>🏆 TOP 5 - Candidatos Premium (Categoria A)</h2>
+            ${categoryA.slice(0, 5).map((c, i) => `
+                <div class="candidate-item">
+                    <div>
+                        <div class="candidate-name">${c.name}</div>
+                        <div class="candidate-details">${c.age} anos • ${c.city || 'N/I'} • ${c.education} • ${c.experienceYears} anos exp.</div>
+                    </div>
+                    <div class="candidate-score">${c.score}</div>
                 </div>
-                ${sortedData.map((candidate, index) => {
-                    const extraInfo = [];
-                    if (candidate.education && candidate.education !== 'Ensino Médio') {
-                        extraInfo.push(candidate.education);
-                    }
-                    if (candidate.senaiCourses > 0) {
-                        extraInfo.push(`${candidate.senaiCourses} cursos SENAI`);
-                    }
-                    if (candidate.companies.length > 0) {
-                        extraInfo.push(`${candidate.companies.length} empresas`);
-                    }
-                    if (candidate.strengths.length > 0) {
-                        extraInfo.push(...candidate.strengths);
-                    }
+            `).join('')}
+        </div>
+
+        <div class="recommendations">
+            <h2>🎯 Recomendações Estratégicas</h2>
+            
+            <div class="highlight">
+                <h3>💎 CONTRATAÇÃO PRIORITÁRIA IMEDIATA</h3>
+                <p><strong>Top 3 Candidatos:</strong></p>
+                <ul>
+                    ${categoryA.slice(0, 3).map(c => `<li><strong>${c.name}</strong> - Score ${c.score} - ${c.experienceYears} anos de experiência</li>`).join('')}
+                </ul>
+            </div>
+
+            <p><strong>📊 DADOS ESTRATÉGICOS:</strong></p>
+            <ul>
+                <li>${analyzedData.filter(c => c.experienceYears >= 20).length} candidatos têm 20+ anos de experiência (Seniores)</li>
+                <li>${analyzedData.filter(c => c.profile === 'mixed').length} candidatos são multifuncionais (Versatilidade)</li>
+                <li>${analyzedData.filter(c => c.machineType === 'ambos').length} candidatos trabalham com ambas máquinas</li>
+                <li>${Math.round((analyzedData.filter(c => ['Várzea Paulista', 'Jundiaí', 'Campo Limpo Paulista', 'Itupeva', 'Cajamar'].includes(c.city)).length / analyzedData.length) * 100)}% residem na região próxima (Logística favorável)</li>
+                <li>${Math.round((analyzedData.filter(c => c.education === 'Superior').length / analyzedData.length) * 100)}% têm formação superior</li>
+            </ul>
+
+            <p><strong>🌍 CONCENTRAÇÃO GEOGRÁFICA:</strong></p>
+            <ul>
+                ${(() => {
+                    const cityCounts = {};
+                    analyzedData.forEach(c => {
+                        const city = c.city || 'Não informado';
+                        cityCounts[city] = (cityCounts[city] || 0) + 1;
+                    });
                     
-                    const extraInfoText = extraInfo.length > 0 ? ` (${extraInfo.join(', ')})` : '';
+                    // Ordenar cidades por quantidade
+                    const sortedCities = Object.entries(cityCounts)
+                        .sort(([,a], [,b]) => b - a)
+                        .slice(0, 6); // Top 6 cidades
                     
-                    return `
-                        <div class="candidate-row ${candidate.category.toLowerCase()}" data-profile="${candidate.profile}" data-machine="${candidate.machineType}" data-city="${candidate.city}" data-category="${candidate.category}">
-                            <div class="candidate-name">
-                                <span class="rank-badge">#${index + 1}</span>
-                                <div class="name-details">
-                                    <div class="main-name">${candidate.name || 'Nome não identificado'}</div>
-                                    ${extraInfoText ? `<div class="extra-info">${extraInfoText}</div>` : ''}
-                                    ${candidate.candidateId ? `<div class="candidate-id">ID: ${candidate.candidateId}</div>` : ''}
-                                </div>
-                            </div>
-                            <div class="candidate-category category-${candidate.category.toLowerCase()}">
-                                ${candidate.category}
-                            </div>
-                            <div class="candidate-score">
-                                <span class="score-badge">${candidate.score}</span>
-                            </div>
-                            <div class="candidate-profile profile-${candidate.profile}">
-                                ${candidate.profile === 'preparador' ? '🔧 Preparador' : 
-                                  candidate.profile === 'operador' ? '⚙️ Operador' : 
-                                  candidate.profile === 'mixed' ? '🔧⚙️ Multifuncional' : '❓ N/E'}
-                            </div>
-                            <div class="machine-type">${getMachineLabel(candidate.machineType)}</div>
-                            <div class="experience-years">
-                                <strong>${candidate.experienceYears}</strong> anos
-                            </div>
-                            <div class="candidate-age">${candidate.age || '?'} anos</div>
-                            <div class="candidate-city">
-                                <div class="city-name">${candidate.city || 'Não informado'}</div>
-                                ${candidate.fullAddress ? `<div class="full-address">${candidate.fullAddress}</div>` : ''}
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            `;
+                    return sortedCities.map(([city, count]) => 
+                        `<li><strong>${city}:</strong> ${count} candidatos (${Math.round((count/analyzedData.length)*100)}%)</li>`
+                    ).join('');
+                })()}
+                ${Object.keys(analyzedData.reduce((acc, c) => { 
+                    const city = c.city || 'Não informado'; 
+                    acc[city] = true; 
+                    return acc; 
+                }, {})).length > 6 ? '<li><strong>Outras cidades:</strong> Distribuição diversificada</li>' : ''}
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>📅 Relatório gerado automaticamente em maio de 2025 • Base: ${analyzedData.length} currículos analisados</p>
+            <p>© 2025 • Desenvolvido por <strong>Rogerinho Ramos</strong> • Sistema Melhorado</p>
+        </div>
+    </div>
+</body>
+</html>`;
         }
 
-        function populateFilters() {
-            const cities = [...new Set(analyzedData.map(c => c.city).filter(c => c))];
-            const cityOptions = document.querySelector('#cityFilter .select-options');
+        function debugLog(message, data = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `🔍 ${timestamp}: ${message}`;
+            console.log(logMessage, data || '');
             
-            const allOption = cityOptions.querySelector('.option-item');
-            cityOptions.innerHTML = '';
-            cityOptions.appendChild(allOption);
-            
-            cities.sort().forEach(city => {
-                const optionItem = document.createElement('label');
-                optionItem.className = 'option-item';
-                optionItem.innerHTML = `
-                    <input type="checkbox" value="${city}"> ${city}
-                `;
-                cityOptions.appendChild(optionItem);
-                
-                const checkbox = optionItem.querySelector('input');
-                checkbox.addEventListener('change', () => {
-                    updateSelectDisplay(document.getElementById('cityFilter'));
-                });
-            });
-        }
-
-        function applyFilters() {
-            const profileValues = getSelectedValues('profileFilter');
-            const machineValues = getSelectedValues('machineFilter');
-            const cityValues = getSelectedValues('cityFilter');
-            const categoryValues = getSelectedValues('categoryFilter');
-            
-            const rows = document.querySelectorAll('.candidate-row');
-            let visibleCount = 0;
-            
-            rows.forEach(row => {
-                const profile = row.getAttribute('data-profile');
-                const machine = row.getAttribute('data-machine');
-                const city = row.getAttribute('data-city');
-                const category = row.getAttribute('data-category');
-                
-                const showProfile = profileValues.length === 0 || profileValues.includes(profile);
-                const showMachine = machineValues.length === 0 || machineValues.includes(machine);
-                const showCity = cityValues.length === 0 || cityValues.includes(city);
-                const showCategory = categoryValues.length === 0 || categoryValues.includes(category);
-                
-                if (showProfile && showMachine && showCity && showCategory) {
-                    row.style.display = '';
-                    visibleCount++;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-            
-            showFilterMessage(visibleCount);
-        }
-
-        function getSelectedValues(filterId) {
-            const checkboxes = document.querySelectorAll(`#${filterId} input[type="checkbox"]:not([value=""]):checked`);
-            return Array.from(checkboxes).map(cb => cb.value);
-        }
-
-        function resetFilters() {
-            document.querySelectorAll('.multi-select input[type="checkbox"]').forEach(checkbox => {
-                if (checkbox.value === '') {
-                    checkbox.checked = true;
-                } else {
-                    checkbox.checked = false;
-                }
-            });
-            
-            document.querySelectorAll('.multi-select').forEach(select => {
-                updateSelectDisplay(select);
-            });
-            
-            document.querySelectorAll('.candidate-row').forEach(row => {
-                row.style.display = '';
-            });
-            
-            const filterMessage = document.querySelector('.filter-message');
-            if (filterMessage) {
-                filterMessage.remove();
+            const debugContent = document.getElementById('debugContent');
+            if (debugContent) {
+                debugContent.textContent += logMessage + '\n';
+                debugContent.scrollTop = debugContent.scrollHeight;
             }
         }
 
-        function showFilterMessage(visibleCount) {
-            const existingMessage = document.querySelector('.filter-message');
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-            
-            const message = document.createElement('div');
-            message.className = 'filter-message';
-            message.style.cssText = `
-                background: #e3f2fd;
-                border: 1px solid #2196f3;
-                border-radius: 5px;
-                padding: 15px;
-                margin: 15px 0;
-                text-align: center;
-                color: #1976d2;
-                font-weight: 600;
-            `;
-            message.innerHTML = `
-                🔍 Mostrando <strong>${visibleCount}</strong> de <strong>${analyzedData.length}</strong> candidatos
-                <button onclick="resetFilters()" style="margin-left: 15px; background: #2196f3; color: white; border: none; padding: 5px 10px; border-radius: 15px; cursor: pointer; font-size: 0.8rem;">Limpar filtros</button>
-            `;
-            
-            const table = document.querySelector('.candidate-table');
-            table.insertBefore(message, table.querySelector('.table-content'));
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('debugSection').style.display = 'block';
+            document.getElementById('analyzeBtn').disabled = true;
         }
 
-        function showDashboard() {
-            document.getElementById('dashboard').classList.add('active');
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('analyzeBtn').disabled = false;
+        }
+
+        function showResults() {
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function updateProgress(current, total) {
+            const progress = (current / total) * 100;
+            const progressFill = document.getElementById('progressFill');
+            if (progressFill) {
+                progressFill.style.width = `${progress}%`;
+            }
         }
 
         function showMessage(message, type = 'info') {
@@ -2968,32 +1135,6 @@ updateProgress(index, total);
                 }
             }, 5000);
         }
-
-
-
-
-            
-  document.addEventListener('DOMContentLoaded', () => {
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-
-    if (uploadArea && fileInput) {
-      uploadArea.addEventListener('click', () => {
-        fileInput.click();
-      });
-
-      fileInput.addEventListener('change', () => {
-        console.log(`Arquivos selecionados: ${fileInput.files.length}`);
-        handleFiles(fileInput.files);
-      });
-    } else {
-      console.error("⚠️ Elementos de upload não encontrados.");
-    }
-  });
-
-
-
-            
     </script>
 </body>
 </html>
